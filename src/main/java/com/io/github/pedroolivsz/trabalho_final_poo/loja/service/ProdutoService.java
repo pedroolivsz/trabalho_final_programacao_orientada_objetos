@@ -18,21 +18,15 @@ public class ProdutoService {
         this.codigoDeBarrasUtil = codigoDeBarrasUtil;
     }
 
-    public ProductValidation criarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
-        ProductValidation validation = ProductValidator.validarProduto(nome, descricao, quantidade, valorUnitario);
-
-        if(validation != ProductValidation.SUCESSO) {
-            return validation;
-        }
+    public void cadastrarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        ProductValidator.validarDadosDoProduto(nome, descricao, quantidade, valorUnitario);
 
         Produto produto = new Produto(nome, descricao, quantidade, valorUnitario);
 
         String codigoDeBarras = codigoDeBarrasUtil.gerarCodigoDeBarras();
         produto.setCodigoDeBarras(codigoDeBarras);
 
-        produtoRepository.criarProduto(produto);
-
-        return ProductValidation.SUCESSO;
+        produtoRepository.cadastrarProduto(produto);
     }
 
     public ProductValidation subtrairQuantidade(String nome, int quantidade) {

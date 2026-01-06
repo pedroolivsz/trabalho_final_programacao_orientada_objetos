@@ -5,7 +5,6 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.LojaControll
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 
 public class LojaView {
@@ -100,7 +99,7 @@ public class LojaView {
     private void processarOpcaoMenuLoja(int opcao, Loja loja) {
         switch (opcao) {
             case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
-            case 1 -> produtoView.criarProduto();
+            case 1 -> produtoView.cadastrarProduto();
             case 2 -> vendaView.exibirMenuDeVenda();
             case 3 -> produtoView.listarProdutos();
             case 4 -> relatorioGeral(loja);

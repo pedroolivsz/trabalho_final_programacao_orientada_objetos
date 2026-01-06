@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.LojaService;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidation;
 
 public class LojaController {
 	private final LojaService lojaService;

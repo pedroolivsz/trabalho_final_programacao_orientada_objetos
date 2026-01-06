@@ -15,7 +15,7 @@ public class ProdutoRepository {
         }
     }
 
-    public void criarProduto(Produto produto) {
+    public void cadastrarProduto(Produto produto) {
         produtos.add(produto);
     }
 

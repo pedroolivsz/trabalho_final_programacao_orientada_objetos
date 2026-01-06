@@ -4,7 +4,6 @@ import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationExc
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.LojaRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.PasswordUtil;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 
 import java.util.List;
@@ -38,12 +37,6 @@ public class LojaService {
 
     public Loja procurarPorCNPJ(String cnpj) {
         return lojaRepository.procurarPorCNPJ(cnpj);
-    }
-
-    private ShopValidation validarSenha(Loja lojaProcurada, String senhaDigitada) {
-        if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) return ShopValidation.SENHA_INVALIDA;
-
-        return ShopValidation.SUCESSO;
     }
 
     private boolean existeCnpj(String cnpj) {

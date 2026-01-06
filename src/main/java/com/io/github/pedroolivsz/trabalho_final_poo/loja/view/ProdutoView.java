@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
@@ -22,14 +23,17 @@ public class ProdutoView {
         }
     }
 
-    public void criarProduto() {
-        String nome = InputUtil.lerString("Nome: ", "Cadastro de produtos");
-        String descricao = InputUtil.lerString("Descrição: ", "Cadastro de produtos");
-        int quantidade = InputUtil.lerInteiro("Quantidade: ", "Cadastro de produtos");
-        BigDecimal valorUnitario = InputUtil.lerBigDecimal("Valor unitário: ", "Cadastro de produtos");
-        ProductValidation productValidation = produtoController.criarProduto(nome, descricao, quantidade, valorUnitario);
+    public void cadastrarProduto() {
+        try {
+            String nome = InputUtil.lerString("Nome: ", "Cadastro de produtos");
+            String descricao = InputUtil.lerString("Descrição: ", "Cadastro de produtos");
+            int quantidade = InputUtil.lerInteiro("Quantidade: ", "Cadastro de produtos");
+            BigDecimal valorUnitario = InputUtil.lerBigDecimal("Valor unitário: ", "Cadastro de produtos");
 
-        tratarErro(productValidation);
+            produtoController.cadastrarProduto(nome, descricao, quantidade, valorUnitario);
+        } catch (ProductValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao cadastrar produto");
+        }
     }
 
     public void subtrairQuantidadeProduto() {

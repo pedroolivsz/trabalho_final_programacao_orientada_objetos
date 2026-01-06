@@ -14,8 +14,8 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    public ProductValidation criarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
-        return produtoService.criarProduto(nome, descricao, quantidade, valorUnitario);
+    public void cadastrarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        produtoService.cadastrarProduto(nome, descricao, quantidade, valorUnitario);
     }
 
     public ProductValidation subtrairQuantidadeProduto(String nome, int quantidade) {
