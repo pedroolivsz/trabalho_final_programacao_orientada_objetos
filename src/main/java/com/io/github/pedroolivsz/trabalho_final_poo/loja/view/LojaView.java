@@ -72,7 +72,6 @@ public class LojaView {
         Loja loja = realizarLogin();
 
         if(loja == null) {
-            MessageUtil.error("CNPJ ou senha inválidos", "Erro de login");
             return;
         }
 
@@ -85,17 +84,17 @@ public class LojaView {
     }
 
     private Loja realizarLogin() {
-        String cnpj = InputUtil.lerString("CNPJ: ", "Login");
-        String senha = InputUtil.lerString("Senha: ", "Login");
+        try {
+            String cnpj = InputUtil.lerString("CNPJ: ", "Login");
+            String senha = InputUtil.lerString("Senha: ", "Login");
 
-        ShopValidation validation = lojaController.login(cnpj, senha);
-
-        if(validation != ShopValidation.SUCESSO) {
-            MessageUtil.error(validation.getMessage(), "Erro");
-            return null;
+            lojaController.login(cnpj, senha);
+            return lojaController.procurarLoja(cnpj);
+        } catch (ShopValidationException exception) {
+            MessageUtil.error("CNPJ ou senha incorretos", "Erro de login");
         }
 
-        return lojaController.procurarLoja(cnpj);
+        return null;
     }
 
     private void processarOpcaoMenuLoja(int opcao, Loja loja) {

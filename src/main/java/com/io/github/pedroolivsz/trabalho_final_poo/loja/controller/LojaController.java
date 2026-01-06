@@ -17,8 +17,8 @@ public class LojaController {
 		lojaService.salvarLoja(nome, localizacao, CNPJ, senha);
 	}
 	
-	public ShopValidation login(String CNPJ, String senha) {
-		return lojaService.login(CNPJ, senha);
+	public void login(String CNPJ, String senha) {
+		lojaService.login(CNPJ, senha);
 	}
 	
 	public List<Loja> listarLojas() {

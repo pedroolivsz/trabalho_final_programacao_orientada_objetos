@@ -28,11 +28,12 @@ public class LojaService {
         return lojaRepository.listarLojas();
     }
 
-    public ShopValidation login(String cnpj, String senhaDigitada) {
+    public void login(String cnpj, String senhaDigitada) {
         Loja lojaProcurada = procurarPorCNPJ(cnpj);
-        if(lojaProcurada == null) return ShopValidation.CNPJ_INVALIDO;
 
-        return validarSenha(lojaProcurada, senhaDigitada);
+        ShopValidator.validarExistenciaDeLoja(lojaProcurada);
+
+        if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) throw new ShopValidationException("Senha inválida");
     }
 
     public Loja procurarPorCNPJ(String cnpj) {
