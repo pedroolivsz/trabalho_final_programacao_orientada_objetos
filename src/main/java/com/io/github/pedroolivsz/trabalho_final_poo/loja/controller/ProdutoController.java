@@ -18,8 +18,8 @@ public class ProdutoController {
         produtoService.cadastrarProduto(nome, descricao, quantidade, valorUnitario);
     }
 
-    public ProductValidation subtrairQuantidadeProduto(String nome, int quantidade) {
-        return produtoService.subtrairQuantidade(nome, quantidade);
+    public void subtrairQuantidadeProduto(String nome, int quantidade) {
+        produtoService.subtrairQuantidade(nome, quantidade);
     }
 
     public Produto procurarProdutoPorNome(String nome) {

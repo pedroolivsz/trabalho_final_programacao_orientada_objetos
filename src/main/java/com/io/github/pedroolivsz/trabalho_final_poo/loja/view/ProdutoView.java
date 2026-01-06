@@ -43,8 +43,11 @@ public class ProdutoView {
     }
 
     public void subtrairQuantidadeProduto(String nome, int quantidade) {
-        ProductValidation productValidation = produtoController.subtrairQuantidadeProduto(nome, quantidade);
-        tratarErro(productValidation);
+        try {
+            produtoController.subtrairQuantidadeProduto(nome, quantidade);
+        } catch (ProductValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro");
+        }
     }
 
     public void listarProdutos() {

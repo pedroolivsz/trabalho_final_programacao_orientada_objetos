@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.ProdutoRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.loja.CodigoDeBarrasUtil;
@@ -29,28 +30,19 @@ public class ProdutoService {
         produtoRepository.cadastrarProduto(produto);
     }
 
-    public ProductValidation subtrairQuantidade(String nome, int quantidade) {
-        ProductValidation validarQuantidade = ProductValidator.validarQuantidade(quantidade);
-
-        if(validarQuantidade != ProductValidation.SUCESSO) {
-            return validarQuantidade;
-        }
+    public void subtrairQuantidade(String nome, int quantidade) {
+        ProductValidator.validarQuantidade(quantidade);
+        ProductValidator.validarNome(nome);
 
         Produto produtoEditado = procurarProdutoPorNome(nome);
 
-        if(produtoEditado == null) {
-            return ProductValidation.NOME_INVALIDO;
-        }
+        ProductValidator.validarExistenciaDeProduto(produtoEditado);
 
-        if(produtoEditado.getQuantidade() < quantidade) {
-            return ProductValidation.SUBTRACAO_INVALIDA;
-        }
+        if(produtoEditado.getQuantidade() < quantidade) throw new ProductValidationException("Estoque insuficiente");
 
         produtoEditado.setQuantidade(produtoEditado.getQuantidade() - quantidade);
 
         produtoRepository.editarProduto(produtoEditado);
-
-        return ProductValidation.SUCESSO;
     }
 
     public List<Produto> listarProdutos() {

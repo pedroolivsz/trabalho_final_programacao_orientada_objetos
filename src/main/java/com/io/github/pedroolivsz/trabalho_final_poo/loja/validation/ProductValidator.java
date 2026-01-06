@@ -1,6 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.validation;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 
 import java.math.BigDecimal;
 
@@ -12,15 +13,15 @@ public class ProductValidator {
         if (valorUnitario.compareTo(BigDecimal.ZERO) <= 0 || valorUnitario == null) throw new ProductValidationException("Valor unitário inválido");
     }
 
-    public static ProductValidation validarQuantidade(int quantidade) {
-        if (quantidade <= 0) { return ProductValidation.QUANTIDADE_INVALIDA; }
-
-        return ProductValidation.SUCESSO;
+    public static void validarQuantidade(int quantidade) {
+        if (quantidade <= 0) throw new ProductValidationException("Quantidade inválida");
     }
 
-    public static ProductValidation validarNome(String nome) {
-        if (nome == null || nome.isBlank()) { return ProductValidation.NOME_INVALIDO; }
+    public static void validarNome(String nome) {
+        if (nome == null || nome.isBlank()) throw new ProductValidationException("Nome inválido");
+    }
 
-        return ProductValidation.SUCESSO;
+    public static void validarExistenciaDeProduto(Produto produto) {
+        if(produto == null) throw new ProductValidationException("O produto não existe");
     }
 }
