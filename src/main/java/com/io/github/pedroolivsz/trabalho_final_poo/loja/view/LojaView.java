@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.LojaController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
@@ -54,13 +55,17 @@ public class LojaView {
     }
 
     public void adicionarLoja() {
-        String nome = InputUtil.lerString("Nome: ", TITULO_CADASTRO);
-        String localizacao = InputUtil.lerString("Localização: ", TITULO_CADASTRO);
-        String cnpj = InputUtil.lerString("CNPJ: ", TITULO_CADASTRO);
-        String senha = InputUtil.lerString("Senha: ", TITULO_CADASTRO);
+        try {
+            String nome = InputUtil.lerString("Nome: ", TITULO_CADASTRO);
+            String localizacao = InputUtil.lerString("Localização: ", TITULO_CADASTRO);
+            String cnpj = InputUtil.lerString("CNPJ: ", TITULO_CADASTRO);
+            String senha = InputUtil.lerString("Senha: ", TITULO_CADASTRO);
 
-        lojaController.salvarLoja(nome, localizacao, cnpj, senha);
-        MessageUtil.plain("Loja adicionada com sucesso!", "Finalizado");
+            lojaController.salvarLoja(nome, localizacao, cnpj, senha);
+            MessageUtil.plain("Loja adicionada com sucesso!", "Finalizado");
+        } catch (ShopValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao cadastrar loja");
+        }
     }
 
     public void exibirMenuLoja() {

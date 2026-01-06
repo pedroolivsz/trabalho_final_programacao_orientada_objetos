@@ -1,12 +1,12 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.validation;
 
-public class ShopValidator {
-    public static ShopValidation validar(String nome, String localizacao, String CNPJ, String senha) {
-        if(nome == null || nome.isBlank()) { return ShopValidation.NOME_INVALIDO; }
-        if(localizacao == null || localizacao.isBlank()) { return ShopValidation.LOCALIZACAO_INVALIDA; }
-        if(CNPJ == null || CNPJ.isBlank()) { return ShopValidation.CNPJ_INVALIDO; }
-        if(senha == null || senha.isBlank()) { return ShopValidation.SENHA_INVALIDA; }
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 
-        return ShopValidation.SUCESSO;
+public class ShopValidator {
+    public static void validarDadosDaLoja(String nome, String localizacao, String CNPJ, String senha) {
+        if(nome == null || nome.isBlank()) throw new ShopValidationException("Nome inválido");
+        if(localizacao == null || localizacao.isBlank()) throw new ShopValidationException("Localização inválida");
+        if(CNPJ == null || CNPJ.isBlank()) throw new ShopValidationException("CNPJ inválido");
+        if(senha == null || senha.isBlank()) throw new ShopValidationException("Senha inválida");
     }
 }

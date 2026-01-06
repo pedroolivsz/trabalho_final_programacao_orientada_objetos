@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.LojaRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.PasswordUtil;
@@ -15,15 +16,12 @@ public class LojaService {
         this.lojaRepository = lojaRepository;
     }
 
-    public ShopValidation salvarLoja(String nome, String localizacao, String cnpj, String senha) {
-        ShopValidation validation = validarCadastro(nome, localizacao, cnpj, senha);
+    public void salvarLoja(String nome, String localizacao, String cnpj, String senha) {
+        ShopValidator.validarDadosDaLoja(nome, localizacao, cnpj, senha);
 
-        if(validation != ShopValidation.SUCESSO) return validation;
-
-        if(existeCnpj(cnpj)) return ShopValidation.CNPJ_JA_CADASTRADO;
+        if(existeCnpj(cnpj)) throw new ShopValidationException("CNPJ já cadastrado");
 
         lojaRepository.salvarLoja(criarLoja(nome, localizacao, cnpj, senha));
-        return ShopValidation.SUCESSO;
     }
 
     public List<Loja> listarLojas() {
@@ -45,10 +43,6 @@ public class LojaService {
         if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) return ShopValidation.SENHA_INVALIDA;
 
         return ShopValidation.SUCESSO;
-    }
-
-    private ShopValidation validarCadastro(String nome, String localizacao, String cnpj, String senha) {
-        return ShopValidator.validar(nome, localizacao, cnpj, senha);
     }
 
     private boolean existeCnpj(String cnpj) {

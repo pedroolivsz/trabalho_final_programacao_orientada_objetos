@@ -13,8 +13,8 @@ public class LojaController {
 		this.lojaService = lojaService;
 	}
 	
-	public ShopValidation salvarLoja(String nome, String localizacao, String CNPJ, String senha) {
-		return lojaService.salvarLoja(nome, localizacao, CNPJ, senha);
+	public void salvarLoja(String nome, String localizacao, String CNPJ, String senha) {
+		lojaService.salvarLoja(nome, localizacao, CNPJ, senha);
 	}
 	
 	public ShopValidation login(String CNPJ, String senha) {
