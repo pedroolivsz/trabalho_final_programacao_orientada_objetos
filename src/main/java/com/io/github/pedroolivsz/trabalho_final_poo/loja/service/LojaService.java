@@ -6,6 +6,7 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.LojaReposito
 import com.io.github.pedroolivsz.trabalho_final_poo.regex.ValidadorEmail;
 import com.io.github.pedroolivsz.trabalho_final_poo.regex.ValidadorTelefone;
 import com.io.github.pedroolivsz.trabalho_final_poo.regex.ValiladorNumeroRua;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.PasswordUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 
@@ -31,6 +32,17 @@ public class LojaService {
                            String telefone,
                            String email,
                            String senha) {
+
+        nome = PadronizarDadosUtil.normalizarTextoMaiusculo(nome);
+        cnpj = PadronizarDadosUtil.normalzarCnpj(cnpj);
+        cep = PadronizarDadosUtil.normalzarCep(cep);
+        estado = PadronizarDadosUtil.normalizarTextoMaiusculo(estado);
+        cidade = PadronizarDadosUtil.normalizarTextoMaiusculo(cidade);
+        bairro = PadronizarDadosUtil.normalizarTextoMaiusculo(bairro);
+        rua = PadronizarDadosUtil.normalizarTextoMaiusculo(rua);
+        numero = PadronizarDadosUtil.normalizarNumeroDaRua(numero);
+        telefone = PadronizarDadosUtil.normalzarTelefone(telefone);
+        email = PadronizarDadosUtil.normalizarEmail(email);
 
         validarDados(nome, cnpj, cep, estado, cidade, bairro, rua, numero, telefone, email, senha);
         validarRegrasDeNegocio(cnpj, email, telefone);
