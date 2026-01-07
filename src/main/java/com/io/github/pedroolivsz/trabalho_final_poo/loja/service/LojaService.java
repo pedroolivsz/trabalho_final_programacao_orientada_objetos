@@ -32,7 +32,7 @@ public class LojaService {
                            String email,
                            String senha) {
 
-        validarDadosDaloja(nome, cnpj, cep, estado, cidade, bairro, rua, numero, telefone, email, senha);
+        validarDados(nome, cnpj, cep, estado, cidade, bairro, rua, numero, telefone, email, senha);
         validarRegrasDeNegocio(cnpj, email, telefone);
 
         Endereco endereco = criarEnderecoPadrao(cep, estado, cidade, bairro, rua, numero);
@@ -83,17 +83,17 @@ public class LojaService {
         if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) throw new ShopValidationException("Senha inválida");
     }
 
-    private void validarDadosDaloja(String nome,
-                                    String cnpj,
-                                    String cep,
-                                    String estado,
-                                    String cidade,
-                                    String bairro,
-                                    String rua,
-                                    String numero,
-                                    String telefone,
-                                    String email,
-                                    String senha) {
+    private void validarDados(String nome,
+                              String cnpj,
+                              String cep,
+                              String estado,
+                              String cidade,
+                              String bairro,
+                              String rua,
+                              String numero,
+                              String telefone,
+                              String email,
+                              String senha) {
         ShopValidator.validarDadosDaLoja(nome, cnpj, senha);
         ShopValidator.validarDadosDeEndereco(cep, estado, cidade, bairro, rua, numero);
         ShopValidator.validarDadosDeContato(telefone, email);
