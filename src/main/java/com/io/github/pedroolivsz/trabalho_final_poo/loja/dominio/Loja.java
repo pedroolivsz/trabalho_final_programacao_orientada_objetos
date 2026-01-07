@@ -1,24 +1,30 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 
-/**
- *
- * @author pedroolivsz
- */
+import java.math.BigDecimal;
+
 public class Loja {
-    
     private String nome;
-    private String localizacao;
-    private String CNPJ;
+    private String cnpj;
+    private Endereco endereco;
+    private Categoria categoria;
+    private Contatos contatos;
+    private StatusLoja status;
     private String senha;
+    private BigDecimal caixa;
 
     public Loja() {
     }
 
-    public Loja(String nome, String localizacao, String CNPJ, String senha) {
+    public Loja(String nome, String cnpj, Endereco endereco, Categoria categoria, Contatos contatos, StatusLoja status,
+                String senha, BigDecimal caixa) {
         this.nome = nome;
-        this.localizacao = localizacao;
-        this.CNPJ = CNPJ;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.categoria = categoria;
+        this.contatos = contatos;
+        this.status = status;
         this.senha = senha;
+        this.caixa = caixa;
     }
 
     public String getNome() {
@@ -29,20 +35,108 @@ public class Loja {
         this.nome = nome;
     }
 
-    public String getLocalizacao() {
-        return localizacao;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
+    public void setCnpj(String cNPJ) {
+        cnpj = cNPJ;
     }
 
-    public String getCNPJ() {
-        return CNPJ;
+    public Endereco getEndereco() {
+        return endereco;
     }
 
-    public void setCNPJ(String CNPJ) {
-        this.CNPJ = CNPJ;
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getCep() {
+        return endereco.getCep();
+    }
+
+    public void setCep(String cep) {
+        this.endereco.setCep(cep);
+    }
+
+    public String getEstado() {
+        return endereco.getEstado();
+    }
+
+    public void setEstado(String estado) {
+        this.endereco.setEstado(estado);
+    }
+
+    public String getCidade() {
+        return endereco.getCidade();
+    }
+
+    public void setCidade(String cidade) {
+        this.endereco.setCidade(cidade);
+    }
+
+    public String getBairro() {
+        return endereco.getBairro();
+    }
+
+    public void setBairro(String bairro) {
+        this.endereco.setBairro(bairro);
+    }
+
+    public String getRua() {
+        return endereco.getRua();
+    }
+
+    public void setRua(String rua) {
+        this.endereco.setRua(rua);
+    }
+
+    public String getNumero() {
+        return endereco.getNumero();
+    }
+
+    public void setNumero(String numero) {
+        this.endereco.setCep(numero);
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Contatos getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(Contatos contatos) {
+        this.contatos = contatos;
+    }
+
+    public String getTelefone() {
+        return contatos.getTelefone();
+    }
+
+    public void setTelefone(String telefone) {
+        this.contatos.setTelefone(telefone);
+    }
+
+    public String getEmail() {
+        return contatos.getEmail();
+    }
+
+    public void setEmail(String email) {
+        this.contatos.setEmail(email);
+    }
+
+    public StatusLoja getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusLoja status) {
+        this.status = status;
     }
 
     public String getSenha() {
@@ -51,5 +145,13 @@ public class Loja {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public BigDecimal getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(BigDecimal caixa) {
+        this.caixa = caixa;
     }
 }

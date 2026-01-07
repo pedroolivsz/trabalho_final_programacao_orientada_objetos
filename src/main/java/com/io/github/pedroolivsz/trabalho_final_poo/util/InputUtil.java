@@ -1,5 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.util;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
+
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
 
@@ -27,7 +29,7 @@ public class InputUtil {
     public static BigDecimal lerBigDecimal(String msg, String titulo) {
         while (true) {
             String entrada = JOptionPane.showInputDialog(null,
-                    MessageUtil.formatarTexto(msg),
+                    msg,
                     titulo,
                     JOptionPane.PLAIN_MESSAGE);
             if(entrada == null) return null;
@@ -39,6 +41,36 @@ public class InputUtil {
         }
     }
 
+    public static Categoria lerCategoria(String titulo) {
+        while (true) {
+            try {
+                String entrada = JOptionPane.showInputDialog(null,
+                        "1. Vestuário\n" +
+                                "2. Eletrônicos\n" +
+                                "3. Alimentos\n" +
+                                "Escolha: ",
+                        titulo,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (entrada == null) entrada = "0";
+                int entradaNum = Integer.parseInt(entrada);
+
+                switch (entradaNum) {
+                    case 1 -> {
+                        return Categoria.VESTAURIO;
+                    }
+                    case 2 -> {
+                        return Categoria.ELETRONICOS;
+                    }
+                    case 3 -> {
+                        return Categoria.ALIMENTOS;
+                    }
+                    default -> MessageUtil.error("Por favor, digite uma opção válida", "Erro");
+                }
+            } catch (NumberFormatException e) {
+                MessageUtil.error("Por favor, digite uma opção válida", "Erro");
+            }
+        }
+    }
     public static int lerConfirmacaoYesNo(String msg, String titulo) {
         return JOptionPane.showConfirmDialog(null, msg, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
     }
