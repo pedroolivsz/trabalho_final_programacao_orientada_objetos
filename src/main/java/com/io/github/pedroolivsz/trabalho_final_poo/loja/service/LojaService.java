@@ -37,10 +37,8 @@ public class LojaService {
 
         Endereco endereco = criarEnderecoPadrao(cep, estado, cidade, bairro, rua, numero);
         Contatos contatos = criarContatosPadrao(telefone, email);
-        StatusLoja statusDaLoja = StatusLoja.ATIVA;
-        BigDecimal caixa = BigDecimal.ZERO;
 
-        Loja loja = criarLojaPadrao(nome, cnpj, endereco, categoria, contatos, statusDaLoja, senha, caixa);
+        Loja loja = criarLojaPadrao(nome, cnpj, endereco, categoria, contatos, senha);
 
         lojaRepository.salvarLoja(loja);
     }
@@ -64,11 +62,9 @@ public class LojaService {
                                  Endereco endereco,
                                  Categoria categoria,
                                  Contatos contatos,
-                                 StatusLoja status,
-                                 String senha,
-                                 BigDecimal caixa) {
+                                 String senha) {
         String hash = PasswordUtil.gerarHash(senha);
-        return new Loja(nome, cnpj, endereco, categoria, contatos, status, hash, caixa);
+        return new Loja(nome, cnpj, endereco, categoria, contatos, StatusLoja.ATIVA, hash, BigDecimal.ZERO);
     }
 
     public List<Loja> listarLojas() {
