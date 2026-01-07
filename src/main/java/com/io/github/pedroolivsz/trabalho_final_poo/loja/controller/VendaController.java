@@ -3,6 +3,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Venda;
@@ -16,8 +17,8 @@ public class VendaController {
 		this.vendaService = vendaService;
 	}
 	
-	public VendaValidation salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento) {
-		return vendaService.salvarVenda(produtos, tipoPagamento);
+	public void salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento, BigDecimal valorDaVenda, Loja loja) {
+		vendaService.salvarVenda(produtos, tipoPagamento, valorDaVenda, loja);
 	}
 
     public BigDecimal calcularValorTotal(List<Produto> cesta) {

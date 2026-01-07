@@ -1,10 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.util;
 
 public class PadronizarDadosUtil {
-    public static String normalizarTexto(String texto) {
-        return texto == null ? null : texto.trim();
-    }
-
     public static String normalizarTextoMaiusculo(String texto) {
         return texto == null ? null : texto.trim().toUpperCase();
     }

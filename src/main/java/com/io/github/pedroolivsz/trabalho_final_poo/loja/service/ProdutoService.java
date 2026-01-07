@@ -4,7 +4,6 @@ import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidation
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.ProdutoRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.loja.CodigoDeBarrasUtil;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ProductValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ProductValidator;
 
 import java.math.BigDecimal;
@@ -21,20 +20,21 @@ public class ProdutoService {
 
     public void cadastrarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
         ProductValidator.validarDadosDoProduto(nome, descricao, quantidade, valorUnitario);
+        validarRegrasDeNegocio(nome);
 
-        Produto produto = new Produto(nome, descricao, quantidade, valorUnitario);
+        Produto produto = criarProdutoPadrao(nome, descricao, quantidade, valorUnitario);
 
         String codigoDeBarras = codigoDeBarrasUtil.gerarCodigoDeBarras();
         produto.setCodigoDeBarras(codigoDeBarras);
 
-        produtoRepository.cadastrarProduto(produto);
+        produtoRepository.salvarProduto(produto);
     }
 
     public void subtrairQuantidade(String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
-        Produto produtoEditado = procurarProdutoPorNome(nome);
+        Produto produtoEditado = procurarPorNome(nome);
 
         ProductValidator.validarExistenciaDeProduto(produtoEditado);
 
@@ -49,7 +49,19 @@ public class ProdutoService {
         return produtoRepository.listarProdutos();
     }
 
-    public Produto procurarProdutoPorNome(String nome) {
-        return produtoRepository.procurarProdutoPorNome(nome);
+    private Produto criarProdutoPadrao(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        return new Produto(nome, descricao, quantidade, valorUnitario);
+    }
+
+    private void validarRegrasDeNegocio(String nome) {
+        if(existeProduto(nome)) throw new ProductValidationException("O produto já está cadastrado");
+    }
+
+    public Produto procurarPorNome(String nome) {
+        return produtoRepository.procurarPorNome(nome);
+    }
+
+    private boolean existeProduto(String nome) {
+        return procurarPorNome(nome) != null;
     }
 }

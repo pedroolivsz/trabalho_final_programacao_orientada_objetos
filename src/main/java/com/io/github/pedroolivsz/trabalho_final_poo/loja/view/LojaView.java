@@ -129,7 +129,7 @@ public class LojaView {
         switch (opcao) {
             case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
             case 1 -> produtoView.cadastrarProduto();
-            case 2 -> vendaView.exibirMenuDeVenda();
+            case 2 -> vendaView.exibirMenuDeVenda(loja);
             case 3 -> produtoView.listarProdutos();
             case 4 -> relatorioGeral(loja);
             default -> MessageUtil.error("Opção inválida", "Erro");

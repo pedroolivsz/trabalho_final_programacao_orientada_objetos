@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Venda;
@@ -14,34 +15,25 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.ProdutoView;
 
 public class VendaService {
 	private final VendaRepository vendaRepository;
+    private final LojaService lojaService;
     private final ProdutoView produtoView;
 
-	public VendaService(VendaRepository vendaRepository, ProdutoView produtoView) {
+	public VendaService(VendaRepository vendaRepository, LojaService lojaService, ProdutoView produtoView) {
 		this.vendaRepository = vendaRepository;
+        this.lojaService = lojaService;
         this.produtoView = produtoView;
 	}
 
-	public VendaValidation salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento) {
-		VendaValidation validation = VendaValidator.validar(produtos, tipoPagamento);
-
-        if(validation != VendaValidation.SUCESSO) {
-            return validation;
-        }
+	public void salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento, BigDecimal valorDaVenda, Loja loja) {
+		VendaValidator.validarDados(produtos, tipoPagamento, valorDaVenda);
 		
 		LocalDate dataDaVenda = LocalDate.now();
 		
-		BigDecimal valorTotal = BigDecimal.ZERO;
-		
-		for(Produto produto : produtos) {
-			BigDecimal quantidade = new BigDecimal(produto.getQuantidade());
-			BigDecimal valor = produto.getValorUnitario().multiply(quantidade);
-			valorTotal.add(valor);
-		}
-		
-		Venda venda = new Venda(produtos, tipoPagamento, dataDaVenda, valorTotal);
+		Venda venda = new Venda(produtos, tipoPagamento, dataDaVenda, valorDaVenda);
+
+        lojaService.adicionarDinheiroAoCaixa(loja, valorDaVenda);
+
 		vendaRepository.salvarVenda(venda);
-		
-		return VendaValidation.SUCESSO;
 	}
 
     public boolean adicionarProduto(List<Produto> produtos, String nome, int quantidade) {

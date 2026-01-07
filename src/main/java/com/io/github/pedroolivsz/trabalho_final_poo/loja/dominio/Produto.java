@@ -61,7 +61,8 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "Código de identificação: " + codigoDeBarras +
+        return "Código de barras: " + codigoDeBarras +
+                "| Nome: " + nome +
                 "| Descrição: " + descricao +
                 "| Preco: R$" + valorUnitario +
                 "| Quantidade: " + quantidade;

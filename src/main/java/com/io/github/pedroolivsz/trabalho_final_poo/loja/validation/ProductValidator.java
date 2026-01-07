@@ -10,7 +10,7 @@ public class ProductValidator {
         if (nome == null || nome.isBlank()) throw new ProductValidationException("Nome inválido");
         if (descricao == null || descricao.isBlank()) throw new ProductValidationException("Descrição inválida");
         if (quantidade < 0) throw new ProductValidationException("Quantidade inválida");
-        if (valorUnitario.compareTo(BigDecimal.ZERO) <= 0 || valorUnitario == null) throw new ProductValidationException("Valor unitário inválido");
+        if (valorUnitario == null || valorUnitario.compareTo(BigDecimal.ZERO) <= 0) throw new ProductValidationException("Valor unitário inválido");
     }
 
     public static void validarQuantidade(int quantidade) {

@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.application;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.LojaController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Venda;
@@ -32,15 +33,16 @@ public class LojaApp {
         ProdutoController produtoController = new ProdutoController(produtoService);
         ProdutoView produtoView = new ProdutoView(produtoController);
 
+        LojaRepository lojaRepository = new LojaRepository(lojas);
+        LojaService lojaService = new LojaService(lojaRepository);
+        lojaService.salvarLoja("Madman Company", "01234567891234", "62250", "Ceará", "Ipu", "Canudos", "Santos Dumont", "811", Categoria.ELETRONICOS, "(88) 98144-8445", "jp@gmail.com", "dede");
+        LojaController lojaController = new LojaController(lojaService);
 
         VendaRepository vendaRepository = new VendaRepository(vendas);
-        VendaService vendaService = new VendaService(vendaRepository, produtoView);
+        VendaService vendaService = new VendaService(vendaRepository, lojaService, produtoView);
         VendaController vendaController = new VendaController(vendaService);
         VendaView vendaView = new VendaView(vendaController, produtoView);
 
-        LojaRepository lojaRepository = new LojaRepository(lojas);
-        LojaService lojaService = new LojaService(lojaRepository);
-        LojaController lojaController = new LojaController(lojaService);
         LojaView lojaView = new LojaView(lojaController, vendaController, produtoView, vendaView);
 
         lojaView.exibirMenuPrincipal();

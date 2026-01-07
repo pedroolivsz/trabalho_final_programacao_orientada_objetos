@@ -9,13 +9,9 @@ public class ProdutoRepository {
 
     public ProdutoRepository(List<Produto> produtos) {
         this.produtos = produtos;
-
-        for(Produto produto : produtos) {
-            System.out.println(produto);
-        }
     }
 
-    public void cadastrarProduto(Produto produto) {
+    public void salvarProduto(Produto produto) {
         produtos.add(produto);
     }
 
@@ -36,7 +32,7 @@ public class ProdutoRepository {
         return produtos;
     }
 
-    public Produto procurarProdutoPorNome(String nome) {
+    public Produto procurarPorNome(String nome) {
         Produto procurarProduto = null;
 
         for(Produto produto : produtos) {

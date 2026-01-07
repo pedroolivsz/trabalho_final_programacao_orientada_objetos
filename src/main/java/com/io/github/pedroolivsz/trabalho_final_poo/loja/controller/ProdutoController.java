@@ -2,7 +2,6 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.ProdutoService;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ProductValidation;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ProdutoController {
     }
 
     public Produto procurarProdutoPorNome(String nome) {
-        return produtoService.procurarProdutoPorNome(nome);
+        return produtoService.procurarPorNome(nome);
     }
 
     public List<Produto> listarProdutos() {
