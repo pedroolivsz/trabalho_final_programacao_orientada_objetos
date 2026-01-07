@@ -23,7 +23,33 @@ public class LojaRepository {
         Loja lojaProcurada = null;
 
         for(Loja loja : lojas) {
-            if(loja.getCNPJ().equals(CNPJ)) {
+            if(loja.getCnpj().equals(CNPJ)) {
+                lojaProcurada = loja;
+                break;
+            }
+        }
+
+        return lojaProcurada;
+    }
+
+    public Loja procurarPorEmail(String email) {
+        Loja lojaProcurada = null;
+
+        for(Loja loja : lojas) {
+            if(loja.getEmail().equals(email)) {
+                lojaProcurada = loja;
+                break;
+            }
+        }
+
+        return lojaProcurada;
+    }
+
+    public Loja procurarPorTelefone(String telefone) {
+        Loja lojaProcurada = null;
+
+        for(Loja loja : lojas) {
+            if(loja.getTelefone().equals(telefone)) {
                 lojaProcurada = loja;
                 break;
             }

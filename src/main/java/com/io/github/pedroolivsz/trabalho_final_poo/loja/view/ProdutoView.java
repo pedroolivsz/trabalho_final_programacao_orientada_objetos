@@ -4,7 +4,6 @@ import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidation
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ProductValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 
 import java.math.BigDecimal;
@@ -15,12 +14,6 @@ public class ProdutoView {
 
     public ProdutoView(ProdutoController produtoController) {
         this.produtoController = produtoController;
-    }
-
-    public void tratarErro(ProductValidation productValidation) {
-        if(productValidation != ProductValidation.SUCESSO) {
-            MessageUtil.error(productValidation.getMessage(), "Erro");
-        }
     }
 
     public void cadastrarProduto() {

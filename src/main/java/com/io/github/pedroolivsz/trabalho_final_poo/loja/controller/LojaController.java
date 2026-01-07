@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
 import java.util.List;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.LojaService;
 
@@ -12,8 +13,19 @@ public class LojaController {
 		this.lojaService = lojaService;
 	}
 	
-	public void salvarLoja(String nome, String localizacao, String CNPJ, String senha) {
-		lojaService.salvarLoja(nome, localizacao, CNPJ, senha);
+	public void salvarLoja(String nome,
+                           String cnpj,
+                           String cep,
+                           String estado,
+                           String cidade,
+                           String bairro,
+                           String rua,
+                           String numero,
+                           Categoria categoria,
+                           String telefone,
+                           String email,
+                           String senha) {
+		lojaService.salvarLoja(nome, cnpj, cep, estado, cidade, bairro, rua, numero, categoria, telefone, email, senha);
 	}
 	
 	public void login(String CNPJ, String senha) {
@@ -24,7 +36,7 @@ public class LojaController {
 		return lojaService.listarLojas();
 	}
 
-    public Loja procurarLoja(String CNPJ) {
+    public Loja procuraPorCnpj(String CNPJ) {
         return lojaService.procurarPorCNPJ(CNPJ);
     }
 }
