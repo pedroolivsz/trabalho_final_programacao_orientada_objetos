@@ -63,7 +63,7 @@ public class LojaView {
     public void relatorioGeral(Loja loja) {
         String relatorio = """
                 ┌────────────────────────────────────────────────────────┐
-                │ Nome: %s 
+                │ Nome: %s
                 │ CNPJ: %s
                 │ Endereço: %s
                 │ Categoria: %s

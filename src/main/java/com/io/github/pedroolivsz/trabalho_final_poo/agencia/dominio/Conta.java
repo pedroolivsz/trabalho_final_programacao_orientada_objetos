@@ -6,14 +6,16 @@ public class Conta {
     private String numeroDaConta;
     private Pessoa proprietario;
     private BigDecimal saldo;
+    private StatusConta status;
 
     public Conta() {
     }
 
-    public Conta(String numeroDaConta, Pessoa proprietario, String numeroConta) {
+    public Conta(Pessoa proprietario, String numeroConta) {
     	this.numeroDaConta = numeroConta;
         this.proprietario = proprietario;
         this.saldo = BigDecimal.ZERO;
+        this.status = StatusConta.ATIVA;
     }
 
     public String getNumeroDaConta() { return numeroDaConta; }
