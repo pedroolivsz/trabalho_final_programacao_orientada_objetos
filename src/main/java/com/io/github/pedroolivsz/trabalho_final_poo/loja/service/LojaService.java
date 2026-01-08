@@ -79,21 +79,16 @@ public class LojaService {
         return new Loja(nome, cnpj, endereco, categoria, contatos, StatusLoja.ATIVA, hash, BigDecimal.ZERO);
     }
 
-    public void adicionarDinheiroAoCaixa(Loja loja, BigDecimal valor) {
-        Loja lojaProcurada = procurarPorCNPJ(loja.getCnpj());
-        if(lojaProcurada == null) throw new ShopValidationException("A loja não existe");
-
-        lojaProcurada.setCaixa(lojaProcurada.getCaixa().add(valor));
-    }
-
     public List<Loja> listarLojas() {
         return lojaRepository.listarLojas();
     }
 
     public void login(String cnpj, String senhaDigitada) {
         Loja lojaProcurada = procurarPorCNPJ(cnpj);
-
         ShopValidator.validarExistenciaDeLoja(lojaProcurada);
+        if(lojaProcurada.estaBloqueada()) {
+            throw new ShopValidationException("Loja bloqueada. Acesso negado");
+        }
 
         if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) throw new ShopValidationException("Senha inválida");
     }

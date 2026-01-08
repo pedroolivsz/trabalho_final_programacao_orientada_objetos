@@ -61,19 +61,6 @@ public class LojaView {
     }
 
     public void relatorioGeral(Loja loja) {
-        /**StringBuilder textoRelatorio = new StringBuilder();
-        textoRelatorio.append("Nome da loja: ").append(loja.getNome()).append("\n");
-        textoRelatorio.append("CNPJ: ").append(loja.getCnpj()).append("\n");
-        textoRelatorio.append("Localização: ").append(loja.getCidade()).append("\n");
-
-        textoRelatorio.append("---\n");
-
-        textoRelatorio.append(produtoView.formatarListaProdutos());
-
-        textoRelatorio.append("\n---\n");
-
-        textoRelatorio.append("Valor total de vendas: R$").append(vendaController.calcularValorTotalDeVendas());**/
-
         String relatorio = """
                 ┌────────────────────────────────────────────────────────┐
                 │ Nome: %s 

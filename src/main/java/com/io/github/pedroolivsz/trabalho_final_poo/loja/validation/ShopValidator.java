@@ -34,4 +34,10 @@ public class ShopValidator {
             throw new ShopValidationException("CNPJ inválido");
         }
     }
+
+    public static void validarLojaAtiva(Loja loja) {
+        if(loja.estaBloqueada()) {
+            throw new ShopValidationException("Loja bloqueada por atingir o limite de operações com o caixa zerado");
+        }
+    }
 }

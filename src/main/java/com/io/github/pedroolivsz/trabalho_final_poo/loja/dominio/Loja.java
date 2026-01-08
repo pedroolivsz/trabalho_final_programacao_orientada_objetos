@@ -12,6 +12,8 @@ public class Loja {
     private String senha;
     private BigDecimal caixa;
 
+    private int operacoesComCaixaZerado;
+
     public Loja() {
     }
 
@@ -25,6 +27,32 @@ public class Loja {
         this.status = status;
         this.senha = senha;
         this.caixa = caixa;
+    }
+
+    public void creditar(BigDecimal valor) {
+        this.caixa = this.caixa.add(valor);
+        verificarBloqueio();
+    }
+
+    public void debitar(BigDecimal valor) {
+        this.caixa = this.caixa.subtract(valor);
+        verificarBloqueio();
+    }
+
+    private void verificarBloqueio() {
+        if(caixa.compareTo(BigDecimal.ZERO) == 0) {
+            operacoesComCaixaZerado++;
+        } else if(caixa.compareTo(BigDecimal.ZERO) != 0) {
+            operacoesComCaixaZerado = 0;
+        }
+
+        if(operacoesComCaixaZerado >= 3) {
+            this.status = StatusLoja.BLOQUEADA;
+        }
+    }
+
+    public boolean estaBloqueada() {
+        return this.status == StatusLoja.BLOQUEADA;
     }
 
     public String getNome() {

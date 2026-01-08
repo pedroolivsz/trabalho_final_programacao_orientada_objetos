@@ -6,20 +6,20 @@ import java.util.List;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.VendaRepository;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidator;
 
 public class VendaService {
 	private final VendaRepository vendaRepository;
-    private final LojaService lojaService;
     private final ProdutoService produtoService;
 
-	public VendaService(VendaRepository vendaRepository, LojaService lojaService, ProdutoService produtoService) {
+	public VendaService(VendaRepository vendaRepository, ProdutoService produtoService) {
 		this.vendaRepository = vendaRepository;
-        this.lojaService = lojaService;
         this.produtoService = produtoService;
 	}
 
 	public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja) {
+        ShopValidator.validarLojaAtiva(loja);
         VendaValidator.validarCarrinho(carrinho);
 		VendaValidator.validarTipoPagamento(tipoPagamento);
 
@@ -28,7 +28,7 @@ public class VendaService {
 
         removerProdutosVendidos(carrinho);
 
-        lojaService.adicionarDinheiroAoCaixa(loja, carrinho.calcularTotal());
+        loja.creditar(carrinho.calcularTotal());
 
 		Venda venda = new Venda(carrinho.getProdutos(), tipoPagamento, dataDaVenda, total);
 
