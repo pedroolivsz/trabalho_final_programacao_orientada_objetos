@@ -1,14 +1,9 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Venda;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.VendaService;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidation;
 
 public class VendaController {
 	private final VendaService vendaService;
@@ -17,27 +12,15 @@ public class VendaController {
 		this.vendaService = vendaService;
 	}
 	
-	public void salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento, BigDecimal valorDaVenda, Loja loja) {
-		vendaService.salvarVenda(produtos, tipoPagamento, valorDaVenda, loja);
+	public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja) {
+		vendaService.realizarVenda(carrinho, tipoPagamento, loja);
 	}
-
-    public BigDecimal calcularValorTotal(List<Produto> cesta) {
-        return vendaService.calcularValorTotalDaCesta(cesta);
-    }
 
     public BigDecimal calcularValorTotalDeVendas() {
         return vendaService.calcularValorTotalDeVendas();
     }
 
-    public boolean adicionarProduto(List<Produto> produtos, String nome, int quantidade) {
-        return vendaService.adicionarProduto(produtos, nome, quantidade);
+    public void adicionarProduto(Carrinho carrinho, String nome, int quantidade) {
+        vendaService.adicionarProdutoAoCarrinho(carrinho, nome, quantidade);
     }
-
-    public void removerProdutosVendidos(List<Produto> cesta) {
-        vendaService.removerProdutosVendidos(cesta);
-    }
-	
-	public List<Venda> listarVendas() {
-		return vendaService.listarVendas();
-	}
 }

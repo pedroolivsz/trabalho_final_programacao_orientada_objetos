@@ -39,7 +39,7 @@ public class LojaApp {
         LojaController lojaController = new LojaController(lojaService);
 
         VendaRepository vendaRepository = new VendaRepository(vendas);
-        VendaService vendaService = new VendaService(vendaRepository, lojaService, produtoView);
+        VendaService vendaService = new VendaService(vendaRepository, lojaService, produtoService);
         VendaController vendaController = new VendaController(vendaService);
         VendaView vendaView = new VendaView(vendaController, produtoView);
 

@@ -4,68 +4,46 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Venda;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.VendaRepository;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidator;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.ProdutoView;
 
 public class VendaService {
 	private final VendaRepository vendaRepository;
     private final LojaService lojaService;
-    private final ProdutoView produtoView;
+    private final ProdutoService produtoService;
 
-	public VendaService(VendaRepository vendaRepository, LojaService lojaService, ProdutoView produtoView) {
+	public VendaService(VendaRepository vendaRepository, LojaService lojaService, ProdutoService produtoService) {
 		this.vendaRepository = vendaRepository;
         this.lojaService = lojaService;
-        this.produtoView = produtoView;
+        this.produtoService = produtoService;
 	}
 
-	public void salvarVenda(List<Produto> produtos, TipoPagamento tipoPagamento, BigDecimal valorDaVenda, Loja loja) {
-		VendaValidator.validarDados(produtos, tipoPagamento, valorDaVenda);
-		
-		LocalDate dataDaVenda = LocalDate.now();
-		
-		Venda venda = new Venda(produtos, tipoPagamento, dataDaVenda, valorDaVenda);
+	public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja) {
+        VendaValidator.validarCarrinho(carrinho);
+		VendaValidator.validarTipoPagamento(tipoPagamento);
 
-        lojaService.adicionarDinheiroAoCaixa(loja, valorDaVenda);
+        BigDecimal total = carrinho.calcularTotal();
+		LocalDate dataDaVenda = LocalDate.now();
+
+        removerProdutosVendidos(carrinho);
+
+        lojaService.adicionarDinheiroAoCaixa(loja, carrinho.calcularTotal());
+
+		Venda venda = new Venda(carrinho.getProdutos(), tipoPagamento, dataDaVenda, total);
 
 		vendaRepository.salvarVenda(venda);
 	}
 
-    public boolean adicionarProduto(List<Produto> produtos, String nome, int quantidade) {
-        Produto produtoOriginal = produtoView.procurarProdutoPorNome(nome);
-
-        if(quantidade <= 0) return false;
-        if(produtoOriginal == null) return false;
-
-        Produto produtoCesta = new Produto(produtoOriginal.getNome(), produtoOriginal.getDescricao(),
-                quantidade, produtoOriginal.getValorUnitario());
-        produtoCesta.setCodigoDeBarras(produtoOriginal.getCodigoDeBarras());
-        produtos.add(produtoCesta);
-
-        return true;
+    public void adicionarProdutoAoCarrinho(Carrinho carrinho, String nome, int quantidade) {
+        Produto item = produtoService.procurarPorNome(nome);
+        carrinho.adicionarProduto(item, quantidade);
     }
 
-    public void removerProdutosVendidos(List<Produto> cesta) {
-        for(Produto produtoVendido : cesta) {
-            produtoView.subtrairQuantidadeProduto(produtoVendido.getNome(), produtoVendido.getQuantidade());
+    private void removerProdutosVendidos(Carrinho carrinho) {
+        for(Produto produtoVendido : carrinho.getProdutos()) {
+            produtoService.subtrairQuantidade(produtoVendido.getNome(), produtoVendido.getQuantidade());
         }
-    }
-
-    public BigDecimal calcularValorTotalDaCesta(List<Produto> cesta) {
-        BigDecimal valorTotal = BigDecimal.ZERO;
-        BigDecimal valorDoProduto;
-
-        for(Produto produto : cesta) {
-            valorDoProduto = produto.getValorUnitario().multiply(BigDecimal.valueOf(produto.getQuantidade()));
-            valorTotal = valorTotal.add(valorDoProduto);
-        }
-
-        return valorTotal;
     }
 
     public BigDecimal calcularValorTotalDeVendas() {
@@ -78,9 +56,4 @@ public class VendaService {
 
         return valorTotal;
     }
-	
-	public List<Venda> listarVendas() {
-		return vendaRepository.listarVendas();
-	}
-
 }

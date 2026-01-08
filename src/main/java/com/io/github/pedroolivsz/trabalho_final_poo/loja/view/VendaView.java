@@ -3,16 +3,13 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.SaleValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Carrinho;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidation;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VendaView {
 	private final VendaController vendaController;
@@ -23,62 +20,52 @@ public class VendaView {
         this.produtoView = produtoView;
 	}
 
-    public void exibirResultado(VendaValidation vendaValidation) {
-        if(vendaValidation == VendaValidation.SUCESSO) {
-            MessageUtil.plain("Venda realizada com sucesso!", "Sucesso");
-        } else {
-            MessageUtil.error(vendaValidation.getMessage(), "Erro");
-        }
-    }
-
-    private void adicionarProdutoACesta(List<Produto> cesta) {
-        String nome = InputUtil.lerString("Nome do produto: ", "Adicionar produto");
-        int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
-
-        boolean sucesso = vendaController.adicionarProduto(cesta, nome, quantidade);
-
-        if(!sucesso) {
-            MessageUtil.error("Produto não encontrado ou quantidade inválida", "Erro");
-        }
-    }
-
-    public void finalizarVenda(List<Produto> carrinho, Loja loja) {
+    private void adicionarProdutoACesta(Carrinho carrinho) {
         try {
-            if(carrinho.isEmpty()) {
+            String nome = InputUtil.lerString("Nome do produto: ", "Adicionar produto");
+            int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
+
+            vendaController.adicionarProduto(carrinho, nome, quantidade);
+        } catch (SaleValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao adicionar produto ao carrinho");
+        }
+    }
+
+    public void finalizarVenda(Carrinho carrinho, Loja loja) {
+        try {
+            if(carrinho.getProdutos().isEmpty()) {
                 MessageUtil.error("Não é possível finalizar uma venda sem produtos", "Erro");
                 return;
             }
 
-            BigDecimal valorTotalCesta = vendaController.calcularValorTotal(carrinho);
             int opcao;
 
-            String menuDePagamento = montarMenuDePagamento(montarCestaFinalizada(produtoView.formatarListaSimplesProdutos(carrinho), valorTotalCesta));
+            String menuDePagamento = montarMenuDePagamento(montarCestaFinalizada(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()), carrinho.calcularTotal()));
 
             opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
 
             TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
 
-            vendaController.salvarVenda(carrinho, formaDePagamento, valorTotalCesta, loja);
-            vendaController.removerProdutosVendidos(carrinho);
+            vendaController.realizarVenda(carrinho, formaDePagamento, loja);
         } catch (SaleValidationException | ShopValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao finalizar a venda");
         }
     }
 
-    private void exibirCesta(List<Produto> carrinho) {
-        if (carrinho.isEmpty()) {
-            MessageUtil.error("Carrinho vazia.", "Erro");
+    private void exibirCesta(Carrinho carrinho) {
+        if (carrinho.getProdutos().isEmpty()) {
+            MessageUtil.error("Carrinho vazio.", "Erro");
             return;
         }
 
-        String carrinhoFormatado = montarJaneja("Carrinho de produtos", produtoView.formatarListaSimplesProdutos(carrinho));
+        String carrinhoFormatado = montarJaneja("Carrinho de produtos", produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()));
 
         MessageUtil.plain(carrinhoFormatado, "Carrinho");
     }
 
     public void exibirMenuDeVenda(Loja loja) {
         int opcao;
-        List<Produto> carrinho = new ArrayList<>();
+        Carrinho carrinho = new Carrinho();
         do {
             opcao = InputUtil.lerInteiro(montarMenuDeVenda(), "Sistema de loja");
             switch (opcao) {
