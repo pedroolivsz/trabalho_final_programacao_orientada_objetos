@@ -20,4 +20,8 @@ public class Fornecedor {
     public void desativar() {
         this.status = StatusLoja.BLOQUEADA;
     }
+
+    public void reativar() {
+        this.status = StatusLoja.ATIVA;
+    }
 }

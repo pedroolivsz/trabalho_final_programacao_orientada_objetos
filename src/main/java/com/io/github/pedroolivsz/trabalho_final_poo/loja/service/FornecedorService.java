@@ -34,6 +34,14 @@ public class FornecedorService {
         fornecedor.desativar();
     }
 
+    public void reativarFornecedor(String cnpj) {
+        Fornecedor fornecedor = fornecedorRepository.procurarPorCnpj(cnpj);
+
+        if(verificarSeEstaDesativado(cnpj)) throw new OutfitterValidationException("Você não está com o cadastro desativado");
+
+        fornecedor.reativar();
+    }
+
     public boolean verificarSeEFornecedor(String cnpjLoja) {
         return fornecedorRepository.procurarPorCnpj(cnpjLoja) != null;
     }

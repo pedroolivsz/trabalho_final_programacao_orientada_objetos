@@ -31,7 +31,7 @@ public class FornecedorView {
                 opcao = InputUtil.lerInteiro(montarMenuDoFornecedorDesativado(), "Menu do fornecedor");
                 switch (opcao) {
                     case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
-                    case 1 -> MessageUtil.plain("Teste", "Teste");
+                    case 1 -> reativarFornecedor(loja.getCnpj());
                     default -> MessageUtil.error("Opção inválida", "Erro");
                 }
                 return;
@@ -65,7 +65,7 @@ public class FornecedorView {
     public void desativarCadastroDeFornecedor(String cnpj) {
         try {
             int confirmacao = InputUtil.lerConfirmacao("Deseja desativar seu cadastro de fornecedor?",
-                    "Desativação do cadastro de fornecedores");
+                    "Desativação do cadastro de fornecedor");
             if(confirmacao == 0) {
                 fornecedorController.desativarFornecedor(cnpj);
                 MessageUtil.plain("Seu cadastro foi desativado", "Cadastro de fornecedores");
@@ -73,7 +73,22 @@ public class FornecedorView {
 
             else MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
         } catch (OutfitterValidationException exception) {
-            MessageUtil.error(exception.getMessage(), "Erro ao se cadastrar como fornecedor");
+            MessageUtil.error(exception.getMessage(), "Erro desativar cadastro como fornecedor");
+        }
+    }
+
+    public void reativarFornecedor(String cnpj) {
+        try {
+            int confirmacao = InputUtil.lerConfirmacao("Deseja reativar seu cadastro de fornecedor?",
+                    "Reativação do cadastro de fornecedor");
+            if(confirmacao == 0) {
+                fornecedorController.desativarFornecedor(cnpj);
+                MessageUtil.plain("Seu cadastro foi reativado", "Cadastro de fornecedores");
+            }
+
+            else MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+        } catch (OutfitterValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao reativar cadastro como fornecedor");
         }
     }
 

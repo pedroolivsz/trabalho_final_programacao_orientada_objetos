@@ -18,6 +18,10 @@ public class FornecedorController {
         fornecedorService.desativarFornecedor(cnpj);
     }
 
+    public void reativarFornecedor(String cnpj) {
+        fornecedorService.reativarFornecedor(cnpj);
+    }
+
     public boolean verificarSeEFornecedor(String cnpj) {
         return fornecedorService.verificarSeEFornecedor(cnpj);
     }
