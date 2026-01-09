@@ -37,7 +37,8 @@ public class LojaApp {
 
         LojaRepository lojaRepository = new LojaRepository(lojas);
         LojaService lojaService = new LojaService(lojaRepository);
-        lojaService.salvarLoja("Madman Company", "01234567891234", "62250", "Ceará", "Ipu", "Canudos", "Santos Dumont", "811", Categoria.ELETRONICOS, "(88) 98144-8445", "jp@gmail.com", "dede");
+        lojaService.salvarLoja("Madman Company", "12345678912345", "54321", "Rj", "Leblon", "Faz me rir", "Rua dos banceiros", "696", Categoria.ELETRONICOS, "(88) 90198-8255", "jp@gmail.com", "dede");
+        lojaService.salvarLoja("Del Nobre", "98765432112345", "12345", "Sp", "Do quebra", "vai quem quer", "Monte dos urubus", "969", Categoria.ELETRONICOS, "(88) 98198-8255", "dede@gmail.com", "jp");
         LojaController lojaController = new LojaController(lojaService);
 
 
