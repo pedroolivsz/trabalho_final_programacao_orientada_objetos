@@ -9,6 +9,7 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
 
 import java.math.BigDecimal;
 
@@ -27,6 +28,8 @@ public class VendaView {
             int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
 
             vendaController.adicionarProduto(idLoja, carrinho, nome, quantidade);
+
+            MessageUtil.plain(nome + " adicionado ao carrinho", "Sucesso");
         } catch (SaleValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao adicionar produto ao carrinho");
         }
@@ -41,25 +44,30 @@ public class VendaView {
 
             int opcao;
 
-            String menuDePagamento = montarMenuDePagamento(montarCestaFinalizada(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()), carrinho.calcularTotal()));
+            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()), carrinho.calcularTotal()));
 
             opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
 
             TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
 
             vendaController.realizarVenda(carrinho, formaDePagamento, loja);
+
+            MessageUtil.plain("Venda finalizada com sucesso", "Sucesso");
+
+            carrinho.esvaziarCarrinho();
         } catch (SaleValidationException | ShopValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao finalizar a venda");
         }
     }
 
-    private void exibirCesta(Carrinho carrinho) {
+    private void exibirCarrinho(Carrinho carrinho) {
         if (carrinho.getProdutos().isEmpty()) {
             MessageUtil.error("Carrinho vazio.", "Erro");
             return;
         }
 
-        String carrinhoFormatado = montarJaneja("Carrinho de produtos", produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()));
+        String carrinhoFormatado = montarCarrinhoDeProdutos(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()),
+                                                            carrinho.calcularTotal());
 
         MessageUtil.plain(carrinhoFormatado, "Carrinho");
     }
@@ -73,7 +81,7 @@ public class VendaView {
                 switch (opcao) {
                     case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
                     case 1 -> adicionarProdutoAoCarrinho(loja.getId(), carrinho);
-                    case 2 -> exibirCesta(carrinho);
+                    case 2 -> exibirCarrinho(carrinho);
                     case 3 -> finalizarVenda(carrinho, loja);
                     default -> MessageUtil.error("Opção inválida", "Erro");
                 }
@@ -81,7 +89,6 @@ public class VendaView {
         } catch (ProductValidationException | SaleValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro");
         }
-
     }
 
     private String montarMenuDeVenda() {
@@ -90,7 +97,7 @@ public class VendaView {
                 │                    Menu de venda
                 │────────────────────────────────────────────────────────│
                 │ 1. Escolher produto
-                │ 2. Cesta de produtos
+                │ 2. Carrinho
                 │ 3. Finalizar compra
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
@@ -105,15 +112,16 @@ public class VendaView {
                 └────────────────────────────────────────────────────────┘""".formatted(titulo, corpo);
     }
 
-    private String montarCestaFinalizada(String cesta, BigDecimal valorTotal) {
+    private String montarCarrinhoDeProdutos(String cesta, BigDecimal valorTotal) {
         return """
                 ┌────────────────────────────────────────────────────────┐
                 │Carrinho de produtos
                 └────────────────────────────────────────────────────────┘
                 %s
                 │────────────────────────────────────────────────────────│
-                │Valor total: R$ %s
-                └────────────────────────────────────────────────────────┘""".formatted(cesta, valorTotal);
+                │Valor total: %s
+                └────────────────────────────────────────────────────────┘""".formatted(cesta,
+                                                                                        PadronizarDadosUtil.normalizarSaldo(valorTotal));
     }
 
     private String montarMenuDePagamento(String texto) {

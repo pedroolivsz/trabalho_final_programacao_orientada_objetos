@@ -26,6 +26,10 @@ public class Carrinho {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void esvaziarCarrinho() {
+        produtos.clear();
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }
