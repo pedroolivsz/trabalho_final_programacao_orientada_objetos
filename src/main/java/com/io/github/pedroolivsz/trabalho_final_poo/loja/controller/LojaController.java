@@ -28,8 +28,8 @@ public class LojaController {
 		lojaService.salvarLoja(nome, cnpj, cep, estado, cidade, bairro, rua, numero, categoria, telefone, email, senha);
 	}
 	
-	public void login(String CNPJ, String senha) {
-		lojaService.login(CNPJ, senha);
+	public Loja login(String CNPJ, String senha) {
+		return lojaService.login(CNPJ, senha);
 	}
 	
 	public List<Loja> listarLojas() {

@@ -30,6 +30,10 @@ public class ProdutoService {
         produtoRepository.salvarProduto(produto);
     }
 
+    public void adicionarProodutoAoEstoque(Produto produto) {
+        produtoRepository.salvarProduto(produto);
+    }
+
     public void subtrairQuantidade(String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);

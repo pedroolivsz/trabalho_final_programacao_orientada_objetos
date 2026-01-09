@@ -15,6 +15,7 @@ import java.util.List;
 
 public class LojaService {
     private final LojaRepository lojaRepository;
+    private Loja lojaLogada;
 
     public LojaService(LojaRepository lojaRepository) {
         this.lojaRepository = lojaRepository;
@@ -83,7 +84,7 @@ public class LojaService {
         return lojaRepository.listarLojas();
     }
 
-    public void login(String cnpj, String senhaDigitada) {
+    public Loja login(String cnpj, String senhaDigitada) {
         Loja lojaProcurada = procurarPorCNPJ(cnpj);
         ShopValidator.validarExistenciaDeLoja(lojaProcurada);
         if(lojaProcurada.estaBloqueada()) {
@@ -91,6 +92,9 @@ public class LojaService {
         }
 
         if(!PasswordUtil.verificarSenha(senhaDigitada, lojaProcurada.getSenha())) throw new ShopValidationException("Senha inválida");
+
+        this.lojaLogada = lojaProcurada;
+        return lojaProcurada;
     }
 
     private void validarDados(String nome,
@@ -141,5 +145,9 @@ public class LojaService {
 
     private boolean existeTelefone(String telefone) {
         return procurarPorTelefone(telefone) != null;
+    }
+
+    public Loja getLojaLogada() {
+        return lojaLogada;
     }
 }

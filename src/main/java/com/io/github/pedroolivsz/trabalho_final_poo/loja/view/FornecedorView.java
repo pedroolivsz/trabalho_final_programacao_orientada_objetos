@@ -1,0 +1,109 @@
+package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
+
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.OutfitterValidationException;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.FornecedorController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
+
+public class FornecedorView {
+    private final FornecedorController fornecedorController;
+
+    public FornecedorView(FornecedorController fornecedorController) {
+        this.fornecedorController = fornecedorController;
+    }
+
+    public void menuDoFornecedor(Loja loja) {
+        int opcao;
+
+        do {
+            if(!fornecedorController.verificarSeEFornecedor(loja.getCnpj())) {
+                opcao = InputUtil.lerInteiro(montarMenuDoFornecedorSemCadastro(), "Menu do fornecedor");
+                switch (opcao) {
+                    case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                    case 1 -> cadastrarFornecedor(loja.getCnpj());
+                    default -> MessageUtil.error("Opção inválida", "Erro");
+                }
+                return;
+            }
+
+            if(fornecedorController.verificarSeEstaDesativado(loja.getCnpj())) {
+                opcao = InputUtil.lerInteiro(montarMenuDoFornecedorDesativado(), "Menu do fornecedor");
+                switch (opcao) {
+                    case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                    case 1 -> MessageUtil.plain("Teste", "Teste");
+                    default -> MessageUtil.error("Opção inválida", "Erro");
+                }
+                return;
+            }
+
+            opcao = InputUtil.lerInteiro(montarMenuDoFornecedorAtivo(), "Menu do fornecedor");
+            switch (opcao) {
+                case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                case 1 -> desativarCadastroDeFornecedor(loja.getCnpj());
+                default -> MessageUtil.error("Opção inválida", "Erro");
+            }
+            return;
+        } while (opcao != 0);
+    }
+
+    public void cadastrarFornecedor(String cnpj) {
+        try {
+            int confirmacao = InputUtil.lerConfirmacao("Deseja se tornar um fornecedor?",
+                                                        "Cadastro de fornecedores");
+            if(confirmacao == 0) {
+                fornecedorController.criarFornecedor(cnpj);
+                MessageUtil.plain("Parabéns, você agora é um fornecedor", "Cadastro de fornecedores");
+            }
+
+            else MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+        } catch (OutfitterValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao se cadastrar como fornecedor");
+        }
+    }
+
+    public void desativarCadastroDeFornecedor(String cnpj) {
+        try {
+            int confirmacao = InputUtil.lerConfirmacao("Deseja desativar seu cadastro de fornecedor?",
+                    "Desativação do cadastro de fornecedores");
+            if(confirmacao == 0) {
+                fornecedorController.desativarFornecedor(cnpj);
+                MessageUtil.plain("Seu cadastro foi desativado", "Cadastro de fornecedores");
+            }
+
+            else MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+        } catch (OutfitterValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao se cadastrar como fornecedor");
+        }
+    }
+
+    public String montarMenuDoFornecedorSemCadastro() {
+        return """
+                ┌────────────────────────────────────────────────────────┐
+                │                 Menu do fornecedor
+                │────────────────────────────────────────────────────────│
+                │ 1. Cadastrar-se como fornecedor
+                │ 0. Sair
+                └────────────────────────────────────────────────────────┘""";
+    }
+
+    public String montarMenuDoFornecedorDesativado() {
+        return """
+                ┌────────────────────────────────────────────────────────┐
+                │                 Menu do fornecedor
+                │────────────────────────────────────────────────────────│
+                │ 1. Reativar cadastro
+                │ 0. Sair
+                └────────────────────────────────────────────────────────┘""";
+    }
+
+    public String montarMenuDoFornecedorAtivo() {
+        return """
+                ┌────────────────────────────────────────────────────────┐
+                │                 Menu do fornecedor
+                │────────────────────────────────────────────────────────│
+                │ 1. Desativar cadastro
+                │ 0. Sair
+                └────────────────────────────────────────────────────────┘""";
+    }
+}

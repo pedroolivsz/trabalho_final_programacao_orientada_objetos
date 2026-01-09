@@ -7,18 +7,25 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
+
+import java.math.BigDecimal;
 
 public class LojaView {
     private final LojaController lojaController;
     private final VendaController vendaController;
     private final ProdutoView produtoView;
     private final VendaView vendaView;
+    private final FornecedorView fornecedorView;
 
-    public LojaView(LojaController lojaController, VendaController vendaController, ProdutoView produtoView, VendaView vendaView) {
+    public LojaView(LojaController lojaController, VendaController vendaController,
+                    ProdutoView produtoView, VendaView vendaView,
+                    FornecedorView fornecedorView) {
         this.lojaController = lojaController;
         this.vendaController = vendaController;
         this.produtoView = produtoView;
         this.vendaView = vendaView;
+        this.fornecedorView = fornecedorView;
     }
 
     private static final String TITULO_SISTEMA = "Sistema de Loja";
@@ -51,8 +58,8 @@ public class LojaView {
             String cnpj = InputUtil.lerString("CNPJ: ", "Login");
             String senha = InputUtil.lerString("Senha: ", "Login");
 
-            lojaController.login(cnpj, senha);
-            return lojaController.procuraPorCnpj(cnpj);
+
+            return lojaController.login(cnpj, senha);
         } catch (ShopValidationException exception) {
             MessageUtil.error("CNPJ ou senha incorretos", "Erro de login");
         }
@@ -107,7 +114,7 @@ public class LojaView {
         int opcao;
 
         do {
-            opcao = InputUtil.lerInteiro(montarMenuLoja(loja.getNome(), loja.getCnpj()), TITULO_SISTEMA);
+            opcao = InputUtil.lerInteiro(montarMenuLoja(loja.getNome(), loja.getCaixa()), TITULO_SISTEMA);
             processarOpcaoMenuLoja(opcao, loja);
         } while (opcao!=0);
     }
@@ -119,6 +126,7 @@ public class LojaView {
             case 2 -> vendaView.exibirMenuDeVenda(loja);
             case 3 -> produtoView.listarProdutos();
             case 4 -> relatorioGeral(loja);
+            case 5 -> fornecedorView.menuDoFornecedor(loja);
             default -> MessageUtil.error("Opção inválida", "Erro");
         }
     }
@@ -134,16 +142,18 @@ public class LojaView {
                 └────────────────────────────────────────────────────────┘""";
     }
 
-    public String montarMenuLoja(String nome, String CNPJ) {
+    public String montarMenuLoja(String nome, BigDecimal saldo) {
         return """
                 ┌────────────────────────────────────────────────────────┐
-                │%s - %s
+                │%s
+                │Valor em caixa: R$ %s
                 │────────────────────────────────────────────────────────│
                 │ 1. Cadastrar produto
                 │ 2. Vender produtos
                 │ 3. Listar produtos
                 │ 4. Relatório de vendas
+                │ 5. Fornecedores
                 │ 0. Sair
-                └────────────────────────────────────────────────────────┘""".formatted(nome, CNPJ);
+                └────────────────────────────────────────────────────────┘""".formatted(nome, PadronizarDadosUtil.normalizarSaldo(saldo));
     }
 }
