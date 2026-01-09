@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
@@ -16,43 +17,43 @@ public class ProdutoView {
         this.produtoController = produtoController;
     }
 
-    public void cadastrarProduto() {
+    public void cadastrarProduto(long idLoja) {
         try {
             String nome = InputUtil.lerString("Nome: ", "Cadastro de produtos");
             String descricao = InputUtil.lerString("Descrição: ", "Cadastro de produtos");
             int quantidade = InputUtil.lerInteiro("Quantidade: ", "Cadastro de produtos");
             BigDecimal valorUnitario = InputUtil.lerBigDecimal("Valor unitário: ", "Cadastro de produtos");
 
-            produtoController.cadastrarProduto(nome, descricao, quantidade, valorUnitario);
+            produtoController.cadastrarProduto(idLoja, nome, descricao, quantidade, valorUnitario);
         } catch (ProductValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao cadastrar produto");
         }
     }
 
-    public void subtrairQuantidadeProduto() {
+    public void subtrairQuantidadeProduto(long idLoja) {
         String nome = InputUtil.lerString("Nome: ", "Informações do produto");
         int quantidade = InputUtil.lerInteiro("Quantidade: ", "Informações do produto");
-        subtrairQuantidadeProduto(nome, quantidade);
+        subtrairQuantidadeProduto(idLoja, nome, quantidade);
     }
 
-    public void subtrairQuantidadeProduto(String nome, int quantidade) {
+    public void subtrairQuantidadeProduto(long idLoja, String nome, int quantidade) {
         try {
-            produtoController.subtrairQuantidadeProduto(nome, quantidade);
+            produtoController.subtrairQuantidadeProduto(idLoja, nome, quantidade);
         } catch (ProductValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro");
         }
     }
 
-    public void listarProdutos() {
-        MessageUtil.plain(formatarListaProdutos(), "Produtos");
+    public void listarProdutos(long idLoja) {
+        MessageUtil.plain(formatarListaProdutos(idLoja), "Produtos");
     }
 
-    public Produto procurarProdutoPorNome(String nome) {
-        return produtoController.procurarProdutoPorNome(nome);
+    public Produto procurarProdutoPorNome(long idLoja, String nome) {
+        return produtoController.procurarProdutoPorNome(idLoja, nome);
     }
 
-    public String formatarListaProdutos() {
-        return formatarListaCompletaProdutos(produtoController.listarProdutos());
+    public String formatarListaProdutos(long idLoja) {
+        return formatarListaCompletaProdutos(produtoController.listarProdutos(idLoja));
     }
 
     public String formatarListaSimplesProdutos(List<Produto> produtos) {

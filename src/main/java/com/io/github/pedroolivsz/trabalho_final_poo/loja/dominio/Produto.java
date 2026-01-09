@@ -3,6 +3,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 import java.math.BigDecimal;
 
 public class Produto {
+    private long idLoja;
     private String codigoDeBarras;
     private String nome;
     private String descricao;
@@ -17,6 +18,14 @@ public class Produto {
         this.descricao = descricao;
         this.valorUnitario = valorUnitario;
         this.quantidade = quantidade;
+    }
+
+    public long getIdLoja() {
+        return idLoja;
+    }
+
+    public void setIdLoja(long idLoja) {
+        this.idLoja = idLoja;
     }
 
     public String getCodigoDeBarras() {

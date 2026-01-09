@@ -18,13 +18,14 @@ public class ProdutoService {
         this.codigoDeBarrasUtil = codigoDeBarrasUtil;
     }
 
-    public void cadastrarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+    public void cadastrarProduto(long idLoja, String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
         ProductValidator.validarDadosDoProduto(nome, descricao, quantidade, valorUnitario);
-        validarRegrasDeNegocio(nome);
+        validarRegrasDeNegocio(idLoja, nome);
 
         Produto produto = criarProdutoPadrao(nome, descricao, quantidade, valorUnitario);
 
         String codigoDeBarras = codigoDeBarrasUtil.gerarCodigoDeBarras();
+        produto.setIdLoja(idLoja);
         produto.setCodigoDeBarras(codigoDeBarras);
 
         produtoRepository.salvarProduto(produto);
@@ -34,11 +35,11 @@ public class ProdutoService {
         produtoRepository.salvarProduto(produto);
     }
 
-    public void subtrairQuantidade(String nome, int quantidade) {
+    public void subtrairQuantidade(long idLoja, String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
-        Produto produtoEditado = procurarPorNome(nome);
+        Produto produtoEditado = procurarPorNome(idLoja, nome);
 
         ProductValidator.validarExistenciaDeProduto(produtoEditado);
 
@@ -49,23 +50,23 @@ public class ProdutoService {
         produtoRepository.editarProduto(produtoEditado);
     }
 
-    public List<Produto> listarProdutos() {
-        return produtoRepository.listarProdutos();
+    public List<Produto> listarProdutos(long idLoja) {
+        return produtoRepository.listarProdutos(idLoja);
     }
 
     private Produto criarProdutoPadrao(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
         return new Produto(nome, descricao, quantidade, valorUnitario);
     }
 
-    private void validarRegrasDeNegocio(String nome) {
-        if(existeProduto(nome)) throw new ProductValidationException("O produto já está cadastrado");
+    private void validarRegrasDeNegocio(long idLoja, String nome) {
+        if(existeProduto(idLoja, nome)) throw new ProductValidationException("O produto já está cadastrado");
     }
 
-    public Produto procurarPorNome(String nome) {
-        return produtoRepository.procurarPorNome(nome);
+    public Produto procurarPorNome(long idLoja, String nome) {
+        return produtoRepository.procurarPorNome(idLoja, nome);
     }
 
-    private boolean existeProduto(String nome) {
-        return procurarPorNome(nome) != null;
+    private boolean existeProduto(long idLoja, String nome) {
+        return procurarPorNome(idLoja, nome) != null;
     }
 }

@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.ProdutoService;
 
@@ -13,19 +14,19 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    public void cadastrarProduto(String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
-        produtoService.cadastrarProduto(nome, descricao, quantidade, valorUnitario);
+    public void cadastrarProduto(long idLoja, String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        produtoService.cadastrarProduto(idLoja, nome, descricao, quantidade, valorUnitario);
     }
 
-    public void subtrairQuantidadeProduto(String nome, int quantidade) {
-        produtoService.subtrairQuantidade(nome, quantidade);
+    public void subtrairQuantidadeProduto(long idLoja, String nome, int quantidade) {
+        produtoService.subtrairQuantidade(idLoja, nome, quantidade);
     }
 
-    public Produto procurarProdutoPorNome(String nome) {
-        return produtoService.procurarPorNome(nome);
+    public Produto procurarProdutoPorNome(long idLoja, String nome) {
+        return produtoService.procurarPorNome(idLoja, nome);
     }
 
-    public List<Produto> listarProdutos() {
-        return produtoService.listarProdutos();
+    public List<Produto> listarProdutos(long idLoja) {
+        return produtoService.listarProdutos(idLoja);
     }
 }

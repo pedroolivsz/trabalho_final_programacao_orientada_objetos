@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.repository;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoRepository {
@@ -28,15 +29,22 @@ public class ProdutoRepository {
         produtos.remove(produto);
     }
 
-    public List<Produto> listarProdutos() {
-        return produtos;
+    public List<Produto> listarProdutos(long idLoja) {
+        List<Produto> listaDaLoja = new ArrayList<>();
+
+        for(Produto produto : produtos) {
+            if(produto.getIdLoja() == idLoja) {
+                listaDaLoja.add(produto);
+            }
+        }
+        return listaDaLoja;
     }
 
-    public Produto procurarPorNome(String nome) {
+    public Produto procurarPorNome(long idLoja, String nome) {
         Produto procurarProduto = null;
 
         for(Produto produto : produtos) {
-            if(produto.getNome().equals(nome)) {
+            if(produto.getNome().equals(nome) && produto.getIdLoja() == idLoja) {
                 procurarProduto = produto;
                 break;
             }
