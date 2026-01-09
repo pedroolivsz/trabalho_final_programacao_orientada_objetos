@@ -15,36 +15,38 @@ public class FornecedorView {
 
     public void menuDoFornecedor(Loja loja) {
         int opcao;
-
-        do {
-            if(!fornecedorController.verificarSeEFornecedor(loja.getCnpj())) {
-                opcao = InputUtil.lerInteiro(montarMenuDoFornecedorSemCadastro(), "Menu do fornecedor");
-                switch (opcao) {
-                    case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
-                    case 1 -> cadastrarFornecedor(loja.getCnpj());
-                    default -> MessageUtil.error("Opção inválida", "Erro");
+        try {
+            do {
+                if(!fornecedorController.verificarSeEFornecedor(loja.getCnpj())) {
+                    opcao = InputUtil.lerInteiro(montarMenuDoFornecedorSemCadastro(), "Menu do fornecedor");
+                    switch (opcao) {
+                        case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                        case 1 -> cadastrarFornecedor(loja.getCnpj());
+                        default -> MessageUtil.error("Opção inválida", "Erro");
+                    }
                 }
-                return;
-            }
 
-            if(fornecedorController.verificarSeEstaDesativado(loja.getCnpj())) {
-                opcao = InputUtil.lerInteiro(montarMenuDoFornecedorDesativado(), "Menu do fornecedor");
-                switch (opcao) {
-                    case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
-                    case 1 -> reativarFornecedor(loja.getCnpj());
-                    default -> MessageUtil.error("Opção inválida", "Erro");
+                if(fornecedorController.verificarSeEstaDesativado(loja.getCnpj())) {
+                    opcao = InputUtil.lerInteiro(montarMenuDoFornecedorDesativado(), "Menu do fornecedor");
+                    switch (opcao) {
+                        case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                        case 1 -> reativarFornecedor(loja.getCnpj());
+                        default -> MessageUtil.error("Opção inválida", "Erro");
+                    }
                 }
-                return;
-            }
 
-            opcao = InputUtil.lerInteiro(montarMenuDoFornecedorAtivo(), "Menu do fornecedor");
-            switch (opcao) {
-                case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
-                case 1 -> desativarCadastroDeFornecedor(loja.getCnpj());
-                default -> MessageUtil.error("Opção inválida", "Erro");
-            }
-            return;
-        } while (opcao != 0);
+                else {
+                    opcao = InputUtil.lerInteiro(montarMenuDoFornecedorAtivo(), "Menu do fornecedor");
+                    switch (opcao) {
+                        case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
+                        case 1 -> desativarCadastroDeFornecedor(loja.getCnpj());
+                        default -> MessageUtil.error("Opção inválida", "Erro");
+                    }
+                }
+            } while (opcao != 0);
+        } catch (OutfitterValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro");
+        }
     }
 
     public void cadastrarFornecedor(String cnpj) {
@@ -82,7 +84,7 @@ public class FornecedorView {
             int confirmacao = InputUtil.lerConfirmacao("Deseja reativar seu cadastro de fornecedor?",
                     "Reativação do cadastro de fornecedor");
             if(confirmacao == 0) {
-                fornecedorController.desativarFornecedor(cnpj);
+                fornecedorController.reativarFornecedor(cnpj);
                 MessageUtil.plain("Seu cadastro foi reativado", "Cadastro de fornecedores");
             }
 

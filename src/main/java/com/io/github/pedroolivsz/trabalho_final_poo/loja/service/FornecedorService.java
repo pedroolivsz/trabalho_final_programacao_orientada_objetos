@@ -37,16 +37,20 @@ public class FornecedorService {
     public void reativarFornecedor(String cnpj) {
         Fornecedor fornecedor = fornecedorRepository.procurarPorCnpj(cnpj);
 
-        if(verificarSeEstaDesativado(cnpj)) throw new OutfitterValidationException("Você não está com o cadastro desativado");
+        if(!verificarSeEstaDesativado(cnpj)) throw new OutfitterValidationException("Você não está com o cadastro desativado");
 
         fornecedor.reativar();
     }
 
     public boolean verificarSeEFornecedor(String cnpjLoja) {
+        if(cnpjLoja == null) throw new OutfitterValidationException("Erro ao verificar loja");
         return fornecedorRepository.procurarPorCnpj(cnpjLoja) != null;
     }
 
     public boolean verificarSeEstaDesativado(String cnpjLoja) {
-        return !fornecedorRepository.procurarPorCnpj(cnpjLoja).estaAtivo();
+        if(cnpjLoja == null) throw new OutfitterValidationException("Erro ao verificar loja");
+        Fornecedor fornecedor = fornecedorRepository.procurarPorCnpj(cnpjLoja);
+        if(fornecedor == null) throw new OutfitterValidationException("Operação cancelada");
+        return !fornecedor.estaAtivo();
     }
 }
