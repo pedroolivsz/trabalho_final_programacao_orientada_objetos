@@ -1,7 +1,5 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
-import java.util.List;
-
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.LojaService;
@@ -31,12 +29,4 @@ public class LojaController {
 	public Loja login(String CNPJ, String senha) {
 		return lojaService.login(CNPJ, senha);
 	}
-	
-	public List<Loja> listarLojas() {
-		return lojaService.listarLojas();
-	}
-
-    public Loja procuraPorCnpj(String CNPJ) {
-        return lojaService.procurarPorCNPJ(CNPJ);
-    }
 }

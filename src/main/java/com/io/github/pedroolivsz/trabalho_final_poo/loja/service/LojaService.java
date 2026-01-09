@@ -11,11 +11,11 @@ import com.io.github.pedroolivsz.trabalho_final_poo.util.PasswordUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class LojaService {
     private final LojaRepository lojaRepository;
     private Loja lojaLogada;
+    private long countLojas = 0;
 
     public LojaService(LojaRepository lojaRepository) {
         this.lojaRepository = lojaRepository;
@@ -53,6 +53,8 @@ public class LojaService {
 
         Loja loja = criarLojaPadrao(nome, cnpj, endereco, categoria, contatos, senha);
 
+        loja.setId(countLojas++);
+
         lojaRepository.salvarLoja(loja);
     }
 
@@ -66,7 +68,6 @@ public class LojaService {
     }
 
     private Contatos criarContatosPadrao(String telefone, String email) {
-        telefone = telefone.replaceAll("[^0-9]", "");
         return new Contatos(telefone, email);
     }
 
@@ -78,10 +79,6 @@ public class LojaService {
                                  String senha) {
         String hash = PasswordUtil.gerarHash(senha);
         return new Loja(nome, cnpj, endereco, categoria, contatos, StatusLoja.ATIVA, hash, BigDecimal.ZERO);
-    }
-
-    public List<Loja> listarLojas() {
-        return lojaRepository.listarLojas();
     }
 
     public Loja login(String cnpj, String senhaDigitada) {

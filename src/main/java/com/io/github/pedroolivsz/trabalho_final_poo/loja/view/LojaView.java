@@ -122,9 +122,9 @@ public class LojaView {
     private void processarOpcaoMenuLoja(int opcao, Loja loja) {
         switch (opcao) {
             case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
-            case 1 -> produtoView.cadastrarProduto();
+            case 1 -> produtoView.cadastrarProduto(loja.getId());
             case 2 -> vendaView.exibirMenuDeVenda(loja);
-            case 3 -> produtoView.listarProdutos();
+            case 3 -> produtoView.listarProdutos(loja.getId());
             case 4 -> relatorioGeral(loja);
             case 5 -> fornecedorView.menuDoFornecedor(loja);
             default -> MessageUtil.error("Opção inválida", "Erro");
@@ -146,7 +146,7 @@ public class LojaView {
         return """
                 ┌────────────────────────────────────────────────────────┐
                 │%s
-                │Valor em caixa: R$ %s
+                │Valor em caixa: %s
                 │────────────────────────────────────────────────────────│
                 │ 1. Cadastrar produto
                 │ 2. Vender produtos

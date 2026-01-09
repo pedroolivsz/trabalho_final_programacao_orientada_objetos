@@ -3,6 +3,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 import java.math.BigDecimal;
 
 public class Loja {
+    private long id;
     private String nome;
     private String cnpj;
     private Endereco endereco;
@@ -53,6 +54,14 @@ public class Loja {
 
     public boolean estaBloqueada() {
         return this.status == StatusLoja.BLOQUEADA;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
