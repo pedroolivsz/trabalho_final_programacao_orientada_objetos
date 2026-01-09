@@ -1,30 +1,38 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
-import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.BuyValidationException;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Compra;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.CompraRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.BuyValidator;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.OutfitterValidator;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
+
+import java.math.BigDecimal;
 
 public class CompraService {
+    private final CompraRepository compraRepository;
     private final ProdutoService produtoService;
     private final LojaService lojaService;
 
-    public CompraService(ProdutoService produtoService, LojaService lojaService) {
+    public CompraService(CompraRepository compraRepository, ProdutoService produtoService, LojaService lojaService) {
+        this.compraRepository = compraRepository;
         this.produtoService = produtoService;
         this.lojaService = lojaService;
     }
 
-    public void realizarCompra(Compra compra) {
-        BuyValidator.validarCompra(compra);
+    public void realizarCompra(Carrinho carrinho, TipoPagamento tipoPagamento, Fornecedor fornecedor, Loja comprador) {
+        OutfitterValidator.validarFornecedor(fornecedor);
+        ShopValidator.validarExistenciaDeLoja(comprador);
+        BuyValidator.validarTipoPagamento(tipoPagamento);
 
-        Loja fornecedor = compra.getFornecedor().getLoja();
-        Loja comprador = lojaService.getLojaLogada();
+        BigDecimal total = carrinho.calcularTotal();
 
-        comprador.debitar(compra.getValorDaCompra());
-        fornecedor.creditar(compra.getValorDaCompra());
 
-        compra.getProdutos().forEach(produtoService::adicionarProodutoAoEstoque);
-        compra.finalizar();
+    }
+
+    public void removerProdutosDoVendedor(long idVendedor, Carrinho carrinho) {
+        for(Produto produtoVendido : carrinho.getProdutos()) {
+            produtoService.subtrairQuantidade(idVendedor, produtoVendido.getNome(), produtoVendido.getQuantidade());
+        }
     }
 
 }

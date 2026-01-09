@@ -6,15 +6,17 @@ import java.util.List;
 
 public class Compra {
     private String id;
-    private Fornecedor fornecedor;
-    private List<Produto> produtos;
+    private final Fornecedor fornecedor;
+    private final List<Produto> produtos;
     private LocalDate dataDaCompra;
     private BigDecimal valorDaCompra;
+    private TipoPagamento tipoPagamento;
     private StatusCompra status;
 
-    public Compra(Fornecedor fornecedor, List<Produto> produtos) {
+    public Compra(Fornecedor fornecedor, List<Produto> produtos, TipoPagamento tipoPagamento) {
         this.fornecedor = fornecedor;
         this.produtos = produtos;
+        this.tipoPagamento = tipoPagamento;
         this.dataDaCompra = LocalDate.now();
         this.status = StatusCompra.PENDENTE;
         calcularTotal();
@@ -38,10 +40,6 @@ public class Compra {
 
     public BigDecimal getValorDaCompra() {
         return valorDaCompra;
-    }
-
-    public StatusCompra getStatus() {
-        return status;
     }
 
     public void finalizar() {
