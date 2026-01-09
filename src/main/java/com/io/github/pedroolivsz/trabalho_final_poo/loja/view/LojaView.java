@@ -78,7 +78,7 @@ public class LojaView {
                 │ E-mail: %s
                 │ Status da Loja: %s
                 │────────────────────────────────────────────────────────│
-                │ Valor em caixa: R$ %s
+                │ Valor em caixa: %s
                 └────────────────────────────────────────────────────────┘""".formatted(loja.getNome(),
                                                                                         loja.getCnpj(),
                                                                                         loja.getEndereco(),
@@ -86,7 +86,7 @@ public class LojaView {
                                                                                         loja.getTelefone(),
                                                                                         loja.getEmail(),
                                                                                         loja.getStatus(),
-                                                                                        vendaController.calcularValorTotalDeVendas());
+                                                                                        PadronizarDadosUtil.normalizarSaldo(vendaController.calcularValorTotalDeVendas()));
 
         MessageUtil.plain(relatorio, "Relatório geral");
     }
