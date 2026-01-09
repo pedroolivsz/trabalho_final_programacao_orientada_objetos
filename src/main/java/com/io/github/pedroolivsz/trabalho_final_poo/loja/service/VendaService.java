@@ -26,7 +26,7 @@ public class VendaService {
         BigDecimal total = carrinho.calcularTotal();
 		LocalDate dataDaVenda = LocalDate.now();
 
-        removerProdutosVendidos(carrinho);
+        removerProdutosVendidos(loja.getId(), carrinho);
 
         loja.creditar(carrinho.calcularTotal());
 
@@ -35,14 +35,14 @@ public class VendaService {
 		vendaRepository.salvarVenda(venda);
 	}
 
-    public void adicionarProdutoAoCarrinho(Carrinho carrinho, String nome, int quantidade) {
-        Produto item = produtoService.procurarPorNome(nome);
+    public void adicionarProdutoAoCarrinho(long idLoja, Carrinho carrinho, String nome, int quantidade) {
+        Produto item = produtoService.procurarPorNome(idLoja, nome);
         carrinho.adicionarProduto(item, quantidade);
     }
 
-    private void removerProdutosVendidos(Carrinho carrinho) {
+    private void removerProdutosVendidos(long idLoja, Carrinho carrinho) {
         for(Produto produtoVendido : carrinho.getProdutos()) {
-            produtoService.subtrairQuantidade(produtoVendido.getNome(), produtoVendido.getQuantidade());
+            produtoService.subtrairQuantidade(idLoja, produtoVendido.getNome(), produtoVendido.getQuantidade());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.SaleValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
@@ -20,12 +21,12 @@ public class VendaView {
         this.produtoView = produtoView;
 	}
 
-    private void adicionarProdutoACesta(Carrinho carrinho) {
+    private void adicionarProdutoAoCarrinho(long idLoja, Carrinho carrinho) {
         try {
             String nome = InputUtil.lerString("Nome do produto: ", "Adicionar produto");
             int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
 
-            vendaController.adicionarProduto(carrinho, nome, quantidade);
+            vendaController.adicionarProduto(idLoja, carrinho, nome, quantidade);
         } catch (SaleValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao adicionar produto ao carrinho");
         }
@@ -64,18 +65,23 @@ public class VendaView {
     }
 
     public void exibirMenuDeVenda(Loja loja) {
-        int opcao;
-        Carrinho carrinho = new Carrinho();
-        do {
-            opcao = InputUtil.lerInteiro(montarMenuDeVenda(), "Sistema de loja");
-            switch (opcao) {
-                case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
-                case 1 -> adicionarProdutoACesta(carrinho);
-                case 2 -> exibirCesta(carrinho);
-                case 3 -> finalizarVenda(carrinho, loja);
-                default -> MessageUtil.error("Opção inválida", "Erro");
-            }
-        } while(opcao!=0);
+        try {
+            int opcao;
+            Carrinho carrinho = new Carrinho();
+            do {
+                opcao = InputUtil.lerInteiro(montarMenuDeVenda(), "Sistema de loja");
+                switch (opcao) {
+                    case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
+                    case 1 -> adicionarProdutoAoCarrinho(loja.getId(), carrinho);
+                    case 2 -> exibirCesta(carrinho);
+                    case 3 -> finalizarVenda(carrinho, loja);
+                    default -> MessageUtil.error("Opção inválida", "Erro");
+                }
+            } while(opcao!=0);
+        } catch (ProductValidationException | SaleValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro");
+        }
+
     }
 
     private String montarMenuDeVenda() {

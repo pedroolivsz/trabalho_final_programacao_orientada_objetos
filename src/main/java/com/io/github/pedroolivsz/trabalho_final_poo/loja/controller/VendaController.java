@@ -20,7 +20,7 @@ public class VendaController {
         return vendaService.calcularValorTotalDeVendas();
     }
 
-    public void adicionarProduto(Carrinho carrinho, String nome, int quantidade) {
-        vendaService.adicionarProdutoAoCarrinho(carrinho, nome, quantidade);
+    public void adicionarProduto(long idLoja, Carrinho carrinho, String nome, int quantidade) {
+        vendaService.adicionarProdutoAoCarrinho(idLoja, carrinho, nome, quantidade);
     }
 }
