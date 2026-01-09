@@ -3,6 +3,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.agencia.view;
 import com.io.github.pedroolivsz.trabalho_final_poo.agencia.controller.ComprovanteController;
 import com.io.github.pedroolivsz.trabalho_final_poo.agencia.dominio.Comprovante;
 import com.io.github.pedroolivsz.trabalho_final_poo.agencia.dominio.Conta;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
 
 import java.math.BigDecimal;
 
@@ -49,7 +50,7 @@ public class ComprovanteView {
             """.formatted(comprovante.getDataDeLancamento(),
                     proprietario.getNumeroDaConta(),
                     proprietario.getNomeProprietario(),
-                    MenuAgenciaView.formatarSaldo(valor));
+                    PadronizarDadosUtil.normalizarSaldo(valor));
     }
 
     private String montarComprovanteComDestinatario(Comprovante comprovante, Conta proprietario,
@@ -68,7 +69,7 @@ public class ComprovanteView {
                 """.formatted(comprovante.getDataDeLancamento(),
                 proprietario.getNumeroDaConta(),
                 proprietario.getNomeProprietario(),
-                MenuAgenciaView.formatarSaldo(valor),
+                PadronizarDadosUtil.normalizarSaldo(valor),
                 numeroContaDestinatario);
     }
 }

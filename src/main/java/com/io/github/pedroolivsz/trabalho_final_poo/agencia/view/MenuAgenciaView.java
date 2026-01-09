@@ -1,6 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.agencia.view;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.agencia.dominio.Conta;
+import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -9,7 +10,6 @@ import java.util.Locale;
 public class MenuAgenciaView {
     public static String montarMenuDaConta(Conta proprietario) {
         return """
-            <html><div style="font-family: Arial; font-size: 12px;"><pre>
             ┌───────────────────────────────────┐
             │           MENU DA CONTA           │
             │───────────────────────────────────│
@@ -22,16 +22,14 @@ public class MenuAgenciaView {
             │ 3. Transferir                     │
             │ 0. Sair                           │
             └───────────────────────────────────┘
-            </pre></div></html>
             """.formatted(
                 proprietario.getNumeroDaConta(),
                 proprietario.getNomeProprietario(),
-                formatarSaldo(proprietario.getSaldo()));
+                PadronizarDadosUtil.normalizarSaldo(proprietario.getSaldo()));
     }
 
     public static String montarMenuInicial() {
         return """
-            <html><div style="font-family: Arial; font-size: 12px;"><pre>
             ┌───────────────────────────────────┐
             │          MENU DA INICIAL          │
             │───────────────────────────────────│
@@ -39,13 +37,6 @@ public class MenuAgenciaView {
             │ 2. Acessar conta                  │
             │ 0. Sair da agência                │
             └───────────────────────────────────┘
-            </pre></div></html>
             """;
-    }
-
-    public static String formatarSaldo(BigDecimal saldo) {
-        return NumberFormat
-                .getCurrencyInstance(new Locale("pt", "BR"))
-                .format(saldo);
     }
 }

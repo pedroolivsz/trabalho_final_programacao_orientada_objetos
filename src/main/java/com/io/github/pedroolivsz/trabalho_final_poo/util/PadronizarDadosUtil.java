@@ -1,5 +1,9 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.util;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class PadronizarDadosUtil {
     public static String normalizarTextoMaiusculo(String texto) {
         return texto == null ? null : texto.trim().toUpperCase();
@@ -23,5 +27,11 @@ public class PadronizarDadosUtil {
 
     public static String normalizarNumeroDaRua(String numero) {
         return numero == null ? null : numero.trim();
+    }
+
+    public static String normalizarSaldo(BigDecimal saldo) {
+        return NumberFormat
+                .getCurrencyInstance(new Locale("pt", "BR"))
+                .format(saldo);
     }
 }

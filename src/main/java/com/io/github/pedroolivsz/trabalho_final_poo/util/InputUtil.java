@@ -71,7 +71,7 @@ public class InputUtil {
             }
         }
     }
-    public static int lerConfirmacaoYesNo(String msg, String titulo) {
+    public static int lerConfirmacao(String msg, String titulo) {
         return JOptionPane.showConfirmDialog(null, msg, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
     }
 }

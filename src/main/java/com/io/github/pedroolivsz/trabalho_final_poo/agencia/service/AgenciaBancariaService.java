@@ -33,7 +33,7 @@ public class AgenciaBancariaService {
 
         String numeroConta = gerarNumeroConta();
 
-        Conta conta = new Conta(numeroConta, proprietario, numeroConta);
+        Conta conta = new Conta(proprietario, numeroConta);
 
         agenciaBancariaRepository.criarConta(conta);
     }
