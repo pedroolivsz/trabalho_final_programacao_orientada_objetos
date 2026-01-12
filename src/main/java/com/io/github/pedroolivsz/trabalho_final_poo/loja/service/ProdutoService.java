@@ -35,7 +35,7 @@ public class ProdutoService {
         produtoRepository.salvarProduto(produto);
     }
 
-    public void subtrairQuantidade(long idLoja, String nome, int quantidade) {
+    public void subtrairProdutosVendidosDoEstoque(long idLoja, String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
@@ -47,7 +47,34 @@ public class ProdutoService {
 
         produtoEditado.setQuantidade(produtoEditado.getQuantidade() - quantidade);
 
-        produtoRepository.editarProduto(produtoEditado);
+        produtoRepository.editarQuantidadeProduto(produtoEditado);
+    }
+
+    public void adicionarProdutoCompradoAoEstoque(long idLoja, long idFornecedor, String nome, int quantidade) {
+        ProductValidator.validarQuantidade(quantidade);
+        ProductValidator.validarNome(nome);
+
+        Produto produtoLoja = procurarPorNome(idLoja, nome);
+        Produto produtoComprado;
+
+        ProductValidator.validarExistenciaDeProduto(produtoLoja);
+
+        if(produtoLoja != null) {
+            produtoLoja.setQuantidade(produtoLoja.getQuantidade() + quantidade);
+
+            produtoRepository.editarQuantidadeProduto(produtoLoja);
+        } else if(produtoLoja == null) {
+            Produto produtoFornecedor = procurarPorNome(idFornecedor, nome);
+
+            ProductValidator.validarExistenciaDeProduto(produtoFornecedor);
+
+            produtoComprado = new Produto(produtoFornecedor.getNome(),
+                    produtoFornecedor.getDescricao(), quantidade, produtoFornecedor.getValorUnitario());
+
+            produtoComprado.setIdLoja(idLoja);
+
+            produtoRepository.salvarProduto(produtoComprado);
+        }
     }
 
     public List<Produto> listarProdutos(long idLoja) {

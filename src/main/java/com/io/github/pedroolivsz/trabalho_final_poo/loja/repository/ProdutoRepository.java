@@ -16,7 +16,7 @@ public class ProdutoRepository {
         produtos.add(produto);
     }
 
-    public void editarProduto(Produto produtoEditado) {
+    public void editarQuantidadeProduto(Produto produtoEditado) {
         for(Produto produto : produtos) {
             if(produto.getCodigoDeBarras().equals(produtoEditado.getCodigoDeBarras())) {
                 produto.setQuantidade(produtoEditado.getQuantidade());

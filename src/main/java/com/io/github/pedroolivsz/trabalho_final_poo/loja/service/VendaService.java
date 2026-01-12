@@ -1,7 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
@@ -24,13 +23,14 @@ public class VendaService {
 		VendaValidator.validarTipoPagamento(tipoPagamento);
 
         BigDecimal total = carrinho.calcularTotal();
-		LocalDate dataDaVenda = LocalDate.now();
 
         removerProdutosVendidos(loja.getId(), carrinho);
 
         loja.creditar(carrinho.calcularTotal());
 
-		Venda venda = new Venda(carrinho.getProdutos(), tipoPagamento, dataDaVenda, total);
+		Venda venda = new Venda(carrinho.getProdutos(), tipoPagamento, total);
+
+        venda.setIdLoja(loja.getId());
 
 		vendaRepository.salvarVenda(venda);
 	}
@@ -42,7 +42,7 @@ public class VendaService {
 
     private void removerProdutosVendidos(long idLoja, Carrinho carrinho) {
         for(Produto produtoVendido : carrinho.getProdutos()) {
-            produtoService.subtrairQuantidade(idLoja, produtoVendido.getNome(), produtoVendido.getQuantidade());
+            produtoService.subtrairProdutosVendidosDoEstoque(idLoja, produtoVendido.getNome(), produtoVendido.getQuantidade());
         }
     }
 

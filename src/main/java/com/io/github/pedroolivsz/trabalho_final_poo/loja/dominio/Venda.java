@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Venda {
 
+    private long idLoja;
 	private List<Produto> listaDeCompras;
 	private TipoPagamento tipoDePagamento;
 	private LocalDate dataDaVenda;
@@ -14,16 +15,20 @@ public class Venda {
     public Venda() {
 	}
 
-	public Venda(List<Produto> listaDeCompras, TipoPagamento tipoDePagamento, LocalDate dataDaVenda,
+	public Venda(List<Produto> listaDeCompras, TipoPagamento tipoDePagamento,
 			BigDecimal valorTotal) {
 		super();
 		this.listaDeCompras = listaDeCompras;
 		this.tipoDePagamento = tipoDePagamento;
-		this.dataDaVenda = dataDaVenda;
+		this.dataDaVenda = LocalDate.now();
 		this.valorTotal = valorTotal;
 	}
 
-	public List<Produto> getListaDeCompras() {
+    public void setIdLoja(long idLoja) {
+        this.idLoja = idLoja;
+    }
+
+    public List<Produto> getListaDeCompras() {
 		return listaDeCompras;
 	}
 

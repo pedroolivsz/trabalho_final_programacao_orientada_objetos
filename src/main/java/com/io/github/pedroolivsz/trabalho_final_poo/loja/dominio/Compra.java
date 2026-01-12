@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Compra {
-    private String id;
+    private long idLoja;
     private final Fornecedor fornecedor;
     private final List<Produto> produtos;
     private LocalDate dataDaCompra;
@@ -28,6 +28,10 @@ public class Compra {
             this.valorDaCompra = this.valorDaCompra.add(produto.getValorUnitario()
                     .multiply(BigDecimal.valueOf(produto.getQuantidade())));
         }
+    }
+
+    public void setIdLoja(long idLoja) {
+        this.idLoja = idLoja;
     }
 
     public Fornecedor getFornecedor() {

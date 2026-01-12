@@ -10,10 +10,12 @@ import java.math.BigDecimal;
 
 public class CompraService {
     private final CompraRepository compraRepository;
+    private final VendaService vendaService;
     private final ProdutoService produtoService;
     private final LojaService lojaService;
 
-    public CompraService(CompraRepository compraRepository, ProdutoService produtoService, LojaService lojaService) {
+    public CompraService(CompraRepository compraRepository, VendaService vendaService, ProdutoService produtoService, LojaService lojaService) {
+        this.vendaService = vendaService;
         this.compraRepository = compraRepository;
         this.produtoService = produtoService;
         this.lojaService = lojaService;
@@ -26,12 +28,31 @@ public class CompraService {
 
         BigDecimal total = carrinho.calcularTotal();
 
+        Compra compra = new Compra(fornecedor, carrinho.getProdutos(), tipoPagamento);
+        Venda venda = new Venda(carrinho.getProdutos(), tipoPagamento, total);
 
+        compra.setIdLoja(comprador.getId());
+        venda.setIdLoja(fornecedor.getLoja().getId());
+
+        comprador.debitar(total);
+        fornecedor.getLoja().creditar(total);
+
+        removerProdutosDoVendedor(fornecedor.getLoja().getId(), carrinho);
+        adicionarProdutosDoComprador(comprador.getId(), fornecedor.getLoja().getId(), carrinho);
+
+        compraRepository.salvarCompra(compra);
+        vendaService.realizarVenda(carrinho, tipoPagamento, fornecedor.getLoja());
     }
 
     public void removerProdutosDoVendedor(long idVendedor, Carrinho carrinho) {
         for(Produto produtoVendido : carrinho.getProdutos()) {
-            produtoService.subtrairQuantidade(idVendedor, produtoVendido.getNome(), produtoVendido.getQuantidade());
+            produtoService.subtrairProdutosVendidosDoEstoque(idVendedor, produtoVendido.getNome(), produtoVendido.getQuantidade());
+        }
+    }
+
+    public void adicionarProdutosDoComprador(long idComprador, long idVendedor, Carrinho carrinho) {
+        for(Produto produtoVendido : carrinho.getProdutos()) {
+            produtoService.adicionarProdutoCompradoAoEstoque(idComprador, idVendedor, produtoVendido.getNome(), produtoVendido.getQuantidade());
         }
     }
 

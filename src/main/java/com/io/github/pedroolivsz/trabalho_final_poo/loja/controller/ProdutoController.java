@@ -1,6 +1,5 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.ProdutoService;
 
@@ -19,7 +18,7 @@ public class ProdutoController {
     }
 
     public void subtrairQuantidadeProduto(long idLoja, String nome, int quantidade) {
-        produtoService.subtrairQuantidade(idLoja, nome, quantidade);
+        produtoService.subtrairProdutosVendidosDoEstoque(idLoja, nome, quantidade);
     }
 
     public Produto procurarProdutoPorNome(long idLoja, String nome) {
