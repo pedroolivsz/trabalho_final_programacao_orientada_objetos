@@ -33,33 +33,33 @@ public class ProdutoService {
         produtoRepository.salvarProduto(produto);
     }
 
-    public void adicionarProodutoAoEstoque(Produto produto) {
-        produtoRepository.salvarProduto(produto);
-    }
-
     public void subtrairProdutosVendidosDoEstoque(long idLoja, String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
-        Produto produtoEditado = procurarPorNome(idLoja, nome);
+        Produto item = procurarPorNome(idLoja, nome);
 
-        ProductValidator.validarExistenciaDeProduto(produtoEditado);
+        System.out.println("=== DEBUG ESTOQUE ===");
+        System.out.println("Loja: " + idLoja);
+        System.out.println("Produto buscado: '" + nome + "'");
+        System.out.println("Loja do produto achado: " + item.getIdLoja());
+        System.out.println("Produto achado: " + item.getNome());
 
-        if(produtoEditado.getQuantidade() < quantidade) throw new ProductValidationException("Estoque insuficiente");
+        ProductValidator.validarExistenciaDeProduto(item);
 
-        produtoEditado.setQuantidade(produtoEditado.getQuantidade() - quantidade);
+        if(item.getQuantidade() < quantidade) throw new ProductValidationException("Estoque insuficiente");
 
-        produtoRepository.editarQuantidadeProduto(produtoEditado);
+        item.setQuantidade(item.getQuantidade() - quantidade);
+
+        produtoRepository.editarQuantidadeProduto(item);
     }
 
-    public void adicionarEstoque(long idLoja, long idFornecedor, String nome, int quantidade) {
+    public void adicionarEstoque(long idComprador, long idFornecedor, String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
-        Produto produtoLoja = procurarPorNome(idLoja, nome);
+        Produto produtoLoja = procurarPorNome(idComprador, nome);
         Produto produtoComprado;
-
-        ProductValidator.validarExistenciaDeProduto(produtoLoja);
 
         if(produtoLoja != null) {
             produtoLoja.setQuantidade(produtoLoja.getQuantidade() + quantidade);
@@ -73,42 +73,10 @@ public class ProdutoService {
             produtoComprado = new Produto(produtoFornecedor.getNome(),
                     produtoFornecedor.getDescricao(), quantidade, produtoFornecedor.getValorUnitario());
 
-            produtoComprado.setIdLoja(idLoja);
+            produtoComprado.setCodigoDeBarras(produtoFornecedor.getCodigoDeBarras());
+            produtoComprado.setIdLoja(idComprador);
 
             produtoRepository.salvarProduto(produtoComprado);
-        }
-    }
-
-    public void adicionarProdutosDoComprador(long idComprador, long idFornecedor, Carrinho carrinho) {
-        for(ItemTransacao item : carrinho.getProdutos()) {
-            adicionarEstoque(idComprador, idFornecedor, item.getProduto().getNome(), item.getQuantidade());
-        }
-    }
-
-    public void removerProdutosDoVendedor(long idFornecedor, Carrinho carrinho) {
-        for(ItemTransacao item : carrinho.getProdutos()) {
-            subtrairProdutosVendidosDoEstoque(idFornecedor, item.getProduto().getNome(), item.getQuantidade());
-        }
-    }
-
-    public void validarDisponibilidade(List<ItemTransacao> itens) {
-        for(ItemTransacao item : itens) {
-            if(item.getQuantidade() > item.getProduto().getQuantidade()) {
-                throw new ProductValidationException("Estoque insuficiente");
-            }
-        }
-    }
-
-    public void baixarEstoque(List<ItemTransacao> itens) {
-        for(ItemTransacao item : itens) {
-            item.getProduto().baixarEstoque(item.getQuantidade());
-        }
-    }
-
-    public void adicionarEstoque(List<ItemTransacao> itens, long idComprador) {
-        for(ItemTransacao item : itens) {
-            item.getProduto().setIdLoja(idComprador);
-            item.getProduto().adicionarEstoque(item.getQuantidade());
         }
     }
 

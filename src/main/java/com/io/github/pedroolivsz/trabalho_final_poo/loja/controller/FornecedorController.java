@@ -29,4 +29,8 @@ public class FornecedorController {
     public boolean verificarSeEstaDesativado(String cnpj) {
         return fornecedorService.verificarSeEstaDesativado(cnpj);
     }
+
+    public Fornecedor procurarPorCnpj(String cnpj) {
+        return fornecedorService.procurarPorCnpj(cnpj);
+    }
 }

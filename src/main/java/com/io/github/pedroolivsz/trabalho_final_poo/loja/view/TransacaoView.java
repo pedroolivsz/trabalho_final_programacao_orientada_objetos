@@ -60,6 +60,31 @@ public class TransacaoView {
         }
     }
 
+    public void finalizarCompra(Carrinho carrinho, Loja fornecedor, Loja comprador) {
+        try {
+            if(carrinho.getProdutos().isEmpty()) {
+                MessageUtil.error("Não é possível finalizar uma venda sem produtos", "Erro");
+                return;
+            }
+
+            int opcao;
+
+            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()), carrinho.calcularTotal()));
+
+            opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
+
+            TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
+
+            transacaoController.realizarCompra(carrinho, formaDePagamento, fornecedor, comprador);
+
+            MessageUtil.plain("Compra finalizada com sucesso", "Sucesso");
+
+            carrinho.esvaziarCarrinho();
+        } catch (SaleValidationException | ShopValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro ao finalizar a venda");
+        }
+    }
+
     private void exibirCarrinho(Carrinho carrinho) {
         if (carrinho.getProdutos().isEmpty()) {
             MessageUtil.error("Carrinho vazio.", "Erro");
@@ -77,7 +102,7 @@ public class TransacaoView {
             int opcao;
             Carrinho carrinho = new Carrinho();
             do {
-                opcao = InputUtil.lerInteiro(montarMenuDeVenda(), "Sistema de loja");
+                opcao = InputUtil.lerInteiro(montarMenuDeVendas(), "Sistema de loja");
                 switch (opcao) {
                     case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
                     case 1 -> adicionarProdutoAoCarrinho(loja.getId(), carrinho);
@@ -91,14 +116,47 @@ public class TransacaoView {
         }
     }
 
-    private String montarMenuDeVenda() {
+    public void exibirMenuDeComprasEntreLojas(Loja loja, Loja fornecedor) {
+        try {
+            int opcao;
+            Carrinho carrinho = new Carrinho();
+            do {
+                opcao = InputUtil.lerInteiro(montarMenuDeTransacoesEntreLojas(), "Sistema de loja");
+                switch (opcao) {
+                    case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
+                    case 1 -> produtoView.listarProdutos(fornecedor.getId());
+                    case 2 -> adicionarProdutoAoCarrinho(fornecedor.getId(), carrinho);
+                    case 3 -> exibirCarrinho(carrinho);
+                    case 4 -> finalizarCompra(carrinho, fornecedor, loja);
+                    default -> MessageUtil.error("Opção inválida", "Erro");
+                }
+            } while(opcao!=0);
+        } catch (ProductValidationException | SaleValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro");
+        }
+    }
+
+    private String montarMenuDeVendas() {
         return """
                 ┌────────────────────────────────────────────────────────┐
-                │                    Menu de venda
+                │                    Menu de vendas
                 │────────────────────────────────────────────────────────│
                 │ 1. Escolher produto
                 │ 2. Carrinho
                 │ 3. Finalizar compra
+                │ 0. Sair
+                └────────────────────────────────────────────────────────┘""";
+    }
+
+    private String montarMenuDeTransacoesEntreLojas() {
+        return """
+                ┌────────────────────────────────────────────────────────┐
+                │                      Compras
+                │────────────────────────────────────────────────────────│
+                │ 1. Catalogo do fornecedor
+                │ 2. Escolher produto
+                │ 3. Carrinho
+                │ 4. Finalizar compra
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
     }

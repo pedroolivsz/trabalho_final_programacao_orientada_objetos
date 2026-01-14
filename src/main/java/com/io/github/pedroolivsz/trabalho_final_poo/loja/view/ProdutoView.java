@@ -3,7 +3,6 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.ItemTransacao;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
@@ -31,12 +30,6 @@ public class ProdutoView {
         }
     }
 
-    public void subtrairQuantidadeProduto(long idLoja) {
-        String nome = InputUtil.lerString("Nome: ", "Informações do produto");
-        int quantidade = InputUtil.lerInteiro("Quantidade: ", "Informações do produto");
-        subtrairQuantidadeProduto(idLoja, nome, quantidade);
-    }
-
     public void subtrairQuantidadeProduto(long idLoja, String nome, int quantidade) {
         try {
             produtoController.subtrairQuantidadeProduto(idLoja, nome, quantidade);
@@ -47,10 +40,6 @@ public class ProdutoView {
 
     public void listarProdutos(long idLoja) {
         MessageUtil.plain(formatarListaProdutos(idLoja), "Produtos");
-    }
-
-    public Produto procurarProdutoPorNome(long idLoja, String nome) {
-        return produtoController.procurarProdutoPorNome(idLoja, nome);
     }
 
     public String formatarListaProdutos(long idLoja) {

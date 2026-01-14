@@ -53,4 +53,8 @@ public class FornecedorService {
         if(fornecedor == null) throw new OutfitterValidationException("Operação cancelada");
         return !fornecedor.estaAtivo();
     }
+
+    public Fornecedor procurarPorCnpj(String cnpj) {
+        return fornecedorRepository.procurarPorCnpj(cnpj);
+    }
 }

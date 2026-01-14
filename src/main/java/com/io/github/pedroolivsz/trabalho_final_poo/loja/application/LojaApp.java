@@ -29,15 +29,15 @@ public class LojaApp {
         lojaService.salvarLoja("Del Nobre", "98765432112345", "12345", "Sp", "Do quebra", "vai quem quer", "Monte dos urubus", "969", Categoria.ELETRONICOS, "(88) 98198-8255", "dede@gmail.com", "jp");
         LojaController lojaController = new LojaController(lojaService);
 
-        FornecedorRepository fornecedorRepository = new FornecedorRepository(fornecedores);
-        FornecedorService fornecedorService = new FornecedorService(fornecedorRepository, lojaService);
-        FornecedorController fornecedorController = new FornecedorController(fornecedorService);
-        FornecedorView fornecedorView = new FornecedorView(fornecedorController);
-
         TransacaoRepository transacaoRepository = new TransacaoRepository(transacoes);
         TransacaoService transacaoService = new TransacaoService(transacaoRepository, produtoService);
         TransacaoController transacaoController = new TransacaoController(transacaoService);
         TransacaoView transacaoView = new TransacaoView(transacaoController, produtoView);
+
+        FornecedorRepository fornecedorRepository = new FornecedorRepository(fornecedores);
+        FornecedorService fornecedorService = new FornecedorService(fornecedorRepository, lojaService);
+        FornecedorController fornecedorController = new FornecedorController(fornecedorService);
+        FornecedorView fornecedorView = new FornecedorView(fornecedorController, transacaoView);
 
         LojaView lojaView = new LojaView(lojaController, transacaoController, produtoView, transacaoView, fornecedorView);
 

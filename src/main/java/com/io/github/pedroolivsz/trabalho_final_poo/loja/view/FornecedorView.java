@@ -2,15 +2,18 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.OutfitterValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.FornecedorController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Fornecedor;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 
 public class FornecedorView {
     private final FornecedorController fornecedorController;
+    private final TransacaoView transacaoView;
 
-    public FornecedorView(FornecedorController fornecedorController) {
+    public FornecedorView(FornecedorController fornecedorController, TransacaoView transacaoView) {
         this.fornecedorController = fornecedorController;
+        this.transacaoView = transacaoView;
     }
 
     public void menuDoFornecedor(Loja loja) {
@@ -22,6 +25,7 @@ public class FornecedorView {
                     switch (opcao) {
                         case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
                         case 1 -> cadastrarFornecedor(loja.getCnpj());
+                        case 2 -> comprarDeFornecedor(loja);
                         default -> MessageUtil.error("Opção inválida", "Erro");
                     }
                 }
@@ -31,6 +35,7 @@ public class FornecedorView {
                     switch (opcao) {
                         case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
                         case 1 -> reativarFornecedor(loja.getCnpj());
+                        case 2 -> comprarDeFornecedor(loja);
                         default -> MessageUtil.error("Opção inválida", "Erro");
                     }
                 }
@@ -40,6 +45,7 @@ public class FornecedorView {
                     switch (opcao) {
                         case 0 -> MessageUtil.plain("Retornando a página anterior...", "Redirecionamento");
                         case 1 -> desativarCadastroDeFornecedor(loja.getCnpj());
+                        case 2 -> comprarDeFornecedor(loja);
                         default -> MessageUtil.error("Opção inválida", "Erro");
                     }
                 }
@@ -62,6 +68,18 @@ public class FornecedorView {
         } catch (OutfitterValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao se cadastrar como fornecedor");
         }
+    }
+
+    public void comprarDeFornecedor(Loja loja) {
+        String cnpjFornecedor = InputUtil.lerString("Cnpj do fornecedor: ", "Procurar fornecedor");
+        Fornecedor fornecedor = fornecedorController.procurarPorCnpj(cnpjFornecedor);
+
+        if(fornecedor == null) {
+            MessageUtil.error("Fornecedor não foi encontrado", "Erro");
+            return;
+        }
+
+        transacaoView.exibirMenuDeComprasEntreLojas(loja, fornecedor.getLoja());
     }
 
     public void desativarCadastroDeFornecedor(String cnpj) {
@@ -100,6 +118,7 @@ public class FornecedorView {
                 │                 Menu do fornecedor
                 │────────────────────────────────────────────────────────│
                 │ 1. Cadastrar-se como fornecedor
+                │ 2. Comprar produtos
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
     }
@@ -110,6 +129,7 @@ public class FornecedorView {
                 │                 Menu do fornecedor
                 │────────────────────────────────────────────────────────│
                 │ 1. Reativar cadastro
+                │ 2. Comprar produtos
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
     }
@@ -120,6 +140,7 @@ public class FornecedorView {
                 │                 Menu do fornecedor
                 │────────────────────────────────────────────────────────│
                 │ 1. Desativar cadastro
+                │ 2. Comprar produtos
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
     }

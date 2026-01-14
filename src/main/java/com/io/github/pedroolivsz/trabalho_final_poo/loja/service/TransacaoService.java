@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.TransacaoRepository;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.BuyValidator;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.VendaValidator;
 
@@ -46,5 +47,44 @@ public class TransacaoService {
                 .filter(transacao -> transacao.getTipoTransacao() == TipoTransacao.VENDA)
                 .map(Transacao::calcularTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void realizarCompra(Carrinho carrinho, TipoPagamento tipoPagamento, Loja fornecedor, Loja comprador) {
+        ShopValidator.validarExistenciaDeLoja(comprador);
+        ShopValidator.validarExistenciaDeLoja(fornecedor);
+        BuyValidator.validarTipoPagamento(tipoPagamento);
+        VendaValidator.validarCarrinho(carrinho);
+
+        BigDecimal total = carrinho.calcularTotal();
+
+        comprador.debitar(total);
+
+        removerProdutosVendidos(fornecedor.getId(), carrinho);
+
+        adicionarProdutosDoComprador(comprador.getId(), fornecedor.getId(), carrinho);
+
+        Transacao compra = new Transacao(comprador.getId(),
+                carrinho.getProdutos(),
+                tipoPagamento,
+                TipoTransacao.COMPRA,
+                total);
+
+        Transacao venda = new Transacao(fornecedor.getId(),
+                carrinho.getProdutos(),
+                tipoPagamento,
+                TipoTransacao.VENDA,
+                total);
+
+        fornecedor.creditar(total);
+
+        transacaoRepository.salvar(compra);
+        transacaoRepository.salvar(venda);
+    }
+
+
+    private void adicionarProdutosDoComprador(long idComprador, long idFornecedor, Carrinho carrinho) {
+        for(ItemTransacao item : carrinho.getProdutos()) {
+            produtoService.adicionarEstoque(idComprador, idFornecedor, item.getProduto().getNome(), item.getQuantidade());
+        }
     }
 }
