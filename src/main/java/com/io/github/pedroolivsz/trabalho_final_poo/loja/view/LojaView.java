@@ -107,9 +107,6 @@ public class LojaView {
     public void exibirMenuLoja() {
         Loja loja = realizarLogin();
 
-        System.out.println("=== DEBUG ESTOQUE ===");
-        System.out.println("Loja: " + loja.getId());
-
         if(loja == null) {
             return;
         }

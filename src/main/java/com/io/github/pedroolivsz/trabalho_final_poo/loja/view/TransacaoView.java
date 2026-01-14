@@ -36,52 +36,37 @@ public class TransacaoView {
     }
 
     public void finalizarVenda(Carrinho carrinho, Loja loja) {
-        try {
-            if(carrinho.getProdutos().isEmpty()) {
-                MessageUtil.error("Não é possível finalizar uma venda sem produtos", "Erro");
-                return;
-            }
-
-            int opcao;
-
-            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()), carrinho.calcularTotal()));
-
-            opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
-
-            TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
-
-            transacaoController.realizarVenda(carrinho, formaDePagamento, loja);
-
-            MessageUtil.plain("Venda finalizada com sucesso", "Sucesso");
-
-            carrinho.esvaziarCarrinho();
-        } catch (SaleValidationException | ShopValidationException exception) {
-            MessageUtil.error(exception.getMessage(), "Erro ao finalizar a venda");
-        }
+        finalzarTransacao(carrinho,
+                "Finalizar venda",
+                () -> transacaoController.realizarVenda(carrinho, TipoPagamento.PIX, loja));
     }
 
     public void finalizarCompra(Carrinho carrinho, Loja fornecedor, Loja comprador) {
-        try {
+        finalzarTransacao(carrinho,
+                "Finalizar Compra",
+                () -> transacaoController.realizarCompra(carrinho, TipoPagamento.PIX, fornecedor, comprador));
+    }
+
+    private void finalzarTransacao(Carrinho carrinho, String titulo, Runnable acaoDeFinalizacao) {
+        try{
             if(carrinho.getProdutos().isEmpty()) {
                 MessageUtil.error("Não é possível finalizar uma venda sem produtos", "Erro");
                 return;
             }
 
-            int opcao;
+            String menu = montarMenuDePagamento(
+                    montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()),
+                    carrinho.calcularTotal()));
 
-            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()), carrinho.calcularTotal()));
+            int opcao = InputUtil.lerInteiro(menu, titulo);
 
-            opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
+            TipoPagamento tipoPagamento = TipoPagamento.fromOpcao(opcao);
 
-            TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
-
-            transacaoController.realizarCompra(carrinho, formaDePagamento, fornecedor, comprador);
-
-            MessageUtil.plain("Compra finalizada com sucesso", "Sucesso");
-
+            acaoDeFinalizacao.run();
+            MessageUtil.plain("Transação finalizada com sucesso", "Sucesso");
             carrinho.esvaziarCarrinho();
         } catch (SaleValidationException | ShopValidationException exception) {
-            MessageUtil.error(exception.getMessage(), "Erro ao finalizar a venda");
+            MessageUtil.error(exception.getMessage(), "Erro ao finalizar a transação");
         }
     }
 

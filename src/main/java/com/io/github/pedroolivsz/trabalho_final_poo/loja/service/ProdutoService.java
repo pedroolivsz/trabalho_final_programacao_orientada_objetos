@@ -39,12 +39,6 @@ public class ProdutoService {
 
         Produto item = procurarPorNome(idLoja, nome);
 
-        System.out.println("=== DEBUG ESTOQUE ===");
-        System.out.println("Loja: " + idLoja);
-        System.out.println("Produto buscado: '" + nome + "'");
-        System.out.println("Loja do produto achado: " + item.getIdLoja());
-        System.out.println("Produto achado: " + item.getNome());
-
         ProductValidator.validarExistenciaDeProduto(item);
 
         if(item.getQuantidade() < quantidade) throw new ProductValidationException("Estoque insuficiente");
