@@ -2,6 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.ItemTransacao;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
@@ -71,6 +72,25 @@ public class ProdutoView {
                         .append("│").append("Qtd: ").append(produto.getQuantidade()).append(" ")
                         .append("│").append("Valor Un.: R$ ").append(produto.getValorUnitario())
                         .append("\n");
+        }
+
+        return stringLista.toString();
+    }
+
+    public String formatarListaSimplesItensTransacao(List<ItemTransacao> produtos) {
+
+        if (produtos.isEmpty()) {
+            MessageUtil.error(listaVazia(), "Erro");
+            return "Lista vazia";
+        }
+
+        StringBuilder stringLista = new StringBuilder();
+
+        for (ItemTransacao item : produtos) {
+            stringLista.append("│").append("Nome: ").append(item.getProduto().getNome()).append(" ")
+                    .append("│").append("Qtd: ").append(item.getQuantidade()).append(" ")
+                    .append("│").append("Valor Un.: R$ ").append(item.getValorUnitario())
+                    .append("\n");
         }
 
         return stringLista.toString();

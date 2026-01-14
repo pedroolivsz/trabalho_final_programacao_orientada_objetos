@@ -2,7 +2,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.LojaController;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.TransacaoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
@@ -13,18 +13,18 @@ import java.math.BigDecimal;
 
 public class LojaView {
     private final LojaController lojaController;
-    private final VendaController vendaController;
+    private final TransacaoController transacaoController;
     private final ProdutoView produtoView;
-    private final VendaView vendaView;
+    private final TransacaoView transacaoView;
     private final FornecedorView fornecedorView;
 
-    public LojaView(LojaController lojaController, VendaController vendaController,
-                    ProdutoView produtoView, VendaView vendaView,
+    public LojaView(LojaController lojaController, TransacaoController transacaoController,
+                    ProdutoView produtoView, TransacaoView transacaoView,
                     FornecedorView fornecedorView) {
         this.lojaController = lojaController;
-        this.vendaController = vendaController;
+        this.transacaoController = transacaoController;
         this.produtoView = produtoView;
-        this.vendaView = vendaView;
+        this.transacaoView = transacaoView;
         this.fornecedorView = fornecedorView;
     }
 
@@ -86,7 +86,7 @@ public class LojaView {
                                                                                         loja.getTelefone(),
                                                                                         loja.getEmail(),
                                                                                         loja.getStatus(),
-                                                                                        PadronizarDadosUtil.normalizarSaldo(vendaController.calcularValorTotalDeVendas()));
+                                                                                        PadronizarDadosUtil.normalizarSaldo(transacaoController.calcularValorTotalDeVendas()));
 
         MessageUtil.plain(relatorio, "Relatório geral");
     }
@@ -123,7 +123,7 @@ public class LojaView {
         switch (opcao) {
             case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
             case 1 -> produtoView.cadastrarProduto(loja.getId());
-            case 2 -> vendaView.exibirMenuDeVenda(loja);
+            case 2 -> transacaoView.exibirMenuDeVenda(loja);
             case 3 -> produtoView.listarProdutos(loja.getId());
             case 4 -> relatorioGeral(loja);
             case 5 -> fornecedorView.menuDoFornecedor(loja);

@@ -1,6 +1,8 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Carrinho;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.ItemTransacao;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.ProdutoRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.loja.CodigoDeBarrasUtil;
@@ -50,7 +52,7 @@ public class ProdutoService {
         produtoRepository.editarQuantidadeProduto(produtoEditado);
     }
 
-    public void adicionarProdutoCompradoAoEstoque(long idLoja, long idFornecedor, String nome, int quantidade) {
+    public void adicionarEstoque(long idLoja, long idFornecedor, String nome, int quantidade) {
         ProductValidator.validarQuantidade(quantidade);
         ProductValidator.validarNome(nome);
 
@@ -74,6 +76,39 @@ public class ProdutoService {
             produtoComprado.setIdLoja(idLoja);
 
             produtoRepository.salvarProduto(produtoComprado);
+        }
+    }
+
+    public void adicionarProdutosDoComprador(long idComprador, long idFornecedor, Carrinho carrinho) {
+        for(ItemTransacao item : carrinho.getProdutos()) {
+            adicionarEstoque(idComprador, idFornecedor, item.getProduto().getNome(), item.getQuantidade());
+        }
+    }
+
+    public void removerProdutosDoVendedor(long idFornecedor, Carrinho carrinho) {
+        for(ItemTransacao item : carrinho.getProdutos()) {
+            subtrairProdutosVendidosDoEstoque(idFornecedor, item.getProduto().getNome(), item.getQuantidade());
+        }
+    }
+
+    public void validarDisponibilidade(List<ItemTransacao> itens) {
+        for(ItemTransacao item : itens) {
+            if(item.getQuantidade() > item.getProduto().getQuantidade()) {
+                throw new ProductValidationException("Estoque insuficiente");
+            }
+        }
+    }
+
+    public void baixarEstoque(List<ItemTransacao> itens) {
+        for(ItemTransacao item : itens) {
+            item.getProduto().baixarEstoque(item.getQuantidade());
+        }
+    }
+
+    public void adicionarEstoque(List<ItemTransacao> itens, long idComprador) {
+        for(ItemTransacao item : itens) {
+            item.getProduto().setIdLoja(idComprador);
+            item.getProduto().adicionarEstoque(item.getQuantidade());
         }
     }
 

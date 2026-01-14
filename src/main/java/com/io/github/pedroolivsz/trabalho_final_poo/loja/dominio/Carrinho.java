@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Carrinho {
-    private final List<Produto> produtos = new ArrayList<>();
+    private final List<ItemTransacao> produtos = new ArrayList<>();
 
     public void adicionarProduto(Produto produto, int quantidade) {
         if(produto == null) throw new SaleValidationException("O produto não foi encontrado");
         if(quantidade < 0) throw new SaleValidationException("Quantidade inválida");
 
-        Produto item = new Produto(produto.getNome(), produto.getDescricao(), quantidade, produto.getValorUnitario());
-
-        item.setCodigoDeBarras(produto.getCodigoDeBarras());
-        produtos.add(item);
+        produtos.add(new ItemTransacao(produto, quantidade));
     }
 
     public BigDecimal calcularTotal() {
@@ -30,7 +27,7 @@ public class Carrinho {
         produtos.clear();
     }
 
-    public List<Produto> getProdutos() {
+    public List<ItemTransacao> getProdutos() {
         return produtos;
     }
 }

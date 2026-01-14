@@ -11,14 +11,14 @@ public class Compra {
     private LocalDate dataDaCompra;
     private BigDecimal valorDaCompra;
     private TipoPagamento tipoPagamento;
-    private StatusCompra status;
+    private StatusTransacao status;
 
     public Compra(Fornecedor fornecedor, List<Produto> produtos, TipoPagamento tipoPagamento) {
         this.fornecedor = fornecedor;
         this.produtos = produtos;
         this.tipoPagamento = tipoPagamento;
         this.dataDaCompra = LocalDate.now();
-        this.status = StatusCompra.PENDENTE;
+        this.status = StatusTransacao.PENDENTE;
         calcularTotal();
     }
 
@@ -47,6 +47,6 @@ public class Compra {
     }
 
     public void finalizar() {
-        this.status = StatusCompra.FINALIZADA;
+        this.status = StatusTransacao.FINALIZADA;
     }
 }

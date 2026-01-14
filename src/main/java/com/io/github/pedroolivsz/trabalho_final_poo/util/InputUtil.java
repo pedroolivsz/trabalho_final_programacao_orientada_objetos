@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class InputUtil {
 
     public static String lerString(String msg, String titulo) {
-        return JOptionPane.showInputDialog(null, MessageUtil.formatarTexto(msg), titulo, JOptionPane.PLAIN_MESSAGE);
+        return JOptionPane.showInputDialog(null, msg, titulo, JOptionPane.PLAIN_MESSAGE);
     }
 
     public static int lerInteiro(String msg, String titulo) {

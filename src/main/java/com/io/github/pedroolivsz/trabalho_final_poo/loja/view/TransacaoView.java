@@ -3,7 +3,7 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.SaleValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.VendaController;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.TransacaoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Carrinho;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
@@ -13,21 +13,21 @@ import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
 
 import java.math.BigDecimal;
 
-public class VendaView {
-	private final VendaController vendaController;
+public class TransacaoView {
+    private final TransacaoController transacaoController;
     private final ProdutoView produtoView;
 
-	public VendaView(VendaController vendaController, ProdutoView produtoView) {
-		this.vendaController = vendaController;
+    public TransacaoView(TransacaoController transacaoController, ProdutoView produtoView) {
+        this.transacaoController = transacaoController;
         this.produtoView = produtoView;
-	}
+    }
 
     private void adicionarProdutoAoCarrinho(long idLoja, Carrinho carrinho) {
         try {
             String nome = InputUtil.lerString("Nome do produto: ", "Adicionar produto");
             int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
 
-            vendaController.adicionarProduto(idLoja, carrinho, nome, quantidade);
+            transacaoController.adicionarProduto(idLoja, carrinho, nome, quantidade);
 
             MessageUtil.plain(nome + " adicionado ao carrinho", "Sucesso");
         } catch (SaleValidationException exception) {
@@ -44,13 +44,13 @@ public class VendaView {
 
             int opcao;
 
-            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()), carrinho.calcularTotal()));
+            String menuDePagamento = montarMenuDePagamento(montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()), carrinho.calcularTotal()));
 
             opcao = InputUtil.lerInteiro(menuDePagamento, "Finalizar Venda");
 
             TipoPagamento formaDePagamento = TipoPagamento.fromOpcao(opcao);
 
-            vendaController.realizarVenda(carrinho, formaDePagamento, loja);
+            transacaoController.realizarVenda(carrinho, formaDePagamento, loja);
 
             MessageUtil.plain("Venda finalizada com sucesso", "Sucesso");
 
@@ -66,8 +66,8 @@ public class VendaView {
             return;
         }
 
-        String carrinhoFormatado = montarCarrinhoDeProdutos(produtoView.formatarListaSimplesProdutos(carrinho.getProdutos()),
-                                                            carrinho.calcularTotal());
+        String carrinhoFormatado = montarCarrinhoDeProdutos(produtoView.formatarListaSimplesItensTransacao(carrinho.getProdutos()),
+                carrinho.calcularTotal());
 
         MessageUtil.plain(carrinhoFormatado, "Carrinho");
     }
@@ -121,7 +121,7 @@ public class VendaView {
                 │────────────────────────────────────────────────────────│
                 │Valor total: %s
                 └────────────────────────────────────────────────────────┘""".formatted(cesta,
-                                                                                        PadronizarDadosUtil.normalizarSaldo(valorTotal));
+                PadronizarDadosUtil.normalizarSaldo(valorTotal));
     }
 
     private String montarMenuDePagamento(String texto) {

@@ -1,5 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
+
 import java.math.BigDecimal;
 
 public class Produto {
@@ -18,6 +20,15 @@ public class Produto {
         this.descricao = descricao;
         this.valorUnitario = valorUnitario;
         this.quantidade = quantidade;
+    }
+
+    public void baixarEstoque(int quantidade) {
+        if(quantidade > this.quantidade) throw new ProductValidationException("Estoque insuficiente");
+        this.quantidade -= quantidade;
+    }
+
+    public void adicionarEstoque(int quantidade) {
+        this.quantidade += quantidade;
     }
 
     public long getIdLoja() {
