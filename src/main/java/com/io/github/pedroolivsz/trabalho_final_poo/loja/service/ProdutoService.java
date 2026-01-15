@@ -1,11 +1,9 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Carrinho;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.ItemTransacao;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Produto;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.ProdutoRepository;
-import com.io.github.pedroolivsz.trabalho_final_poo.util.loja.CodigoDeBarrasUtil;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.CodigoDeBarras;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ProductValidator;
 
 import java.math.BigDecimal;
@@ -13,11 +11,11 @@ import java.util.List;
 
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
-    private final CodigoDeBarrasUtil codigoDeBarrasUtil;
+    private final CodigoDeBarras codigoDeBarras;
 
-    public ProdutoService(ProdutoRepository produtoRepository, CodigoDeBarrasUtil codigoDeBarrasUtil) {
+    public ProdutoService(ProdutoRepository produtoRepository, CodigoDeBarras codigoDeBarras) {
         this.produtoRepository = produtoRepository;
-        this.codigoDeBarrasUtil = codigoDeBarrasUtil;
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public void cadastrarProduto(long idLoja, String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
@@ -26,7 +24,7 @@ public class ProdutoService {
 
         Produto produto = criarProdutoPadrao(nome, descricao, quantidade, valorUnitario);
 
-        String codigoDeBarras = codigoDeBarrasUtil.gerarCodigoDeBarras();
+        String codigoDeBarras = this.codigoDeBarras.gerarCodigoDeBarras();
         produto.setIdLoja(idLoja);
         produto.setCodigoDeBarras(codigoDeBarras);
 

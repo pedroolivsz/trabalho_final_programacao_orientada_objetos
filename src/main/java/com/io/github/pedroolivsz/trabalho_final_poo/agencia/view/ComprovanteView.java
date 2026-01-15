@@ -39,13 +39,13 @@ public class ComprovanteView {
     private String montarComprovanteSimple(Comprovante comprovante, Conta proprietario, BigDecimal valor) {
             return """
             ┌──────────────────────────────────────┐
-            │         Comprovante de saque         │
+            │         Comprovante de saque
             │──────────────────────────────────────│
-            │ Data da transação: %-17s │
-            │ Conta            : Nº %-14s │
-            │ Nome             : %-17s │
+            │ Data da transação: %-17s
+            │ Conta            : Nº %-14s
+            │ Nome             : %-17s
             │──────────────────────────────────────│
-            │ Valor: %-29s │
+            │ Valor: %-29s
             └──────────────────────────────────────┘
             """.formatted(comprovante.getDataDeLancamento(),
                     proprietario.getNumeroDaConta(),
@@ -57,14 +57,14 @@ public class ComprovanteView {
                                                     BigDecimal valor, String numeroContaDestinatario) {
         return """
             ┌──────────────────────────────────────┐
-            │     Comprovante de transferência     │
+            │     Comprovante de transferência
             │──────────────────────────────────────│
-            │ Data da transação: %-17s │
-            │ Conta            : Nº %-14s │
-            │ Nome             : %-17s │
+            │ Data da transação: %-17s
+            │ Conta            : Nº %-14s
+            │ Nome             : %-17s
             │──────────────────────────────────────│
-            │ Valor: %-29s │
-            │ Conta destinatária: Nº %-13s │
+            │ Valor: %-29s
+            │ Conta destinatária: Nº %-13s
             └──────────────────────────────────────┘
                 """.formatted(comprovante.getDataDeLancamento(),
                 proprietario.getNumeroDaConta(),

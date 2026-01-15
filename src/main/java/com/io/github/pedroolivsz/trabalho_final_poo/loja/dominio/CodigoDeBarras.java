@@ -1,8 +1,8 @@
-package com.io.github.pedroolivsz.trabalho_final_poo.util.loja;
+package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 
 import java.time.Year;
 
-public class CodigoDeBarrasUtil {
+public class CodigoDeBarras {
     private long id = 1l;
     public String gerarCodigoDeBarras() {
         String IDFormatado = String.format("%05d", id++);

@@ -11,16 +11,16 @@ public class MenuAgenciaView {
     public static String montarMenuDaConta(Conta proprietario) {
         return """
             ┌───────────────────────────────────┐
-            │           MENU DA CONTA           │
+            │           MENU DA CONTA
             │───────────────────────────────────│
-            │ Nº da conta: %-20s │              
-            │ Nome       : %-20s │
-            │ Saldo      : %-20s │
+            │ Nº da conta: %-20s
+            │ Nome       : %-20s
+            │ Saldo      : %-20s
             │───────────────────────────────────│
-            │ 1. Depositar                      │
-            │ 2. Sacar                          │
-            │ 3. Transferir                     │
-            │ 0. Sair                           │
+            │ 1. Depositar
+            │ 2. Sacar
+            │ 3. Transferir
+            │ 0. Sair
             └───────────────────────────────────┘
             """.formatted(
                 proprietario.getNumeroDaConta(),
@@ -31,11 +31,11 @@ public class MenuAgenciaView {
     public static String montarMenuInicial() {
         return """
             ┌───────────────────────────────────┐
-            │          MENU DA INICIAL          │
+            │          MENU DA INICIAL
             │───────────────────────────────────│
-            │ 1. Criar conta                    │
-            │ 2. Acessar conta                  │
-            │ 0. Sair da agência                │
+            │ 1. Criar conta
+            │ 2. Acessar conta
+            │ 0. Sair da agência
             └───────────────────────────────────┘
             """;
     }
