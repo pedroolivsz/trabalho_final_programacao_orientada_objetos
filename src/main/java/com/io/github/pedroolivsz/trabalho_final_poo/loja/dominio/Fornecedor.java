@@ -24,4 +24,9 @@ public class Fornecedor {
     public void reativar() {
         this.status = StatusLoja.ATIVA;
     }
+
+    @Override
+    public String toString() {
+        return loja.getNome();
+    }
 }

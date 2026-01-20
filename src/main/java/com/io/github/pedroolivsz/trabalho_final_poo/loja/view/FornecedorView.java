@@ -7,6 +7,8 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 
+import java.util.List;
+
 public class FornecedorView {
     private final FornecedorController fornecedorController;
     private final TransacaoView transacaoView;
@@ -71,15 +73,21 @@ public class FornecedorView {
     }
 
     public void comprarDeFornecedor(Loja loja) {
-        String cnpjFornecedor = InputUtil.lerString("Cnpj do fornecedor: ", "Procurar fornecedor");
-        Fornecedor fornecedor = fornecedorController.procurarPorCnpj(cnpjFornecedor);
+        try {
+            List<Fornecedor> fornecedores = fornecedorController.listar();
 
-        if(fornecedor == null) {
-            MessageUtil.error("Fornecedor não foi encontrado", "Erro");
-            return;
+            if(fornecedores.isEmpty()) {
+                MessageUtil.error("Nenhum fornecedor disponivel. Tente novamente mais tarde", "Erro");
+                return;
+            }
+
+            Fornecedor fornecedor = InputUtil.selecionarObjeto(fornecedores, "Escolha o fornecedor: ", "Shopping");
+
+            transacaoView.exibirMenuDeComprasEntreLojas(loja, fornecedor.getLoja());
+        } catch (IllegalArgumentException exception) {
+            MessageUtil.error(exception.getMessage(), "Voltando");
         }
 
-        transacaoView.exibirMenuDeComprasEntreLojas(loja, fornecedor.getLoja());
     }
 
     public void desativarCadastroDeFornecedor(String cnpj) {

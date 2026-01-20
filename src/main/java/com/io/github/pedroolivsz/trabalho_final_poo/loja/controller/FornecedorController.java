@@ -3,6 +3,8 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.controller;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Fornecedor;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.FornecedorService;
 
+import java.util.List;
+
 public class FornecedorController {
     private final FornecedorService fornecedorService;
 
@@ -32,5 +34,9 @@ public class FornecedorController {
 
     public Fornecedor procurarPorCnpj(String cnpj) {
         return fornecedorService.procurarPorCnpj(cnpj);
+    }
+
+    public List<Fornecedor> listar() {
+        return fornecedorService.listar();
     }
 }

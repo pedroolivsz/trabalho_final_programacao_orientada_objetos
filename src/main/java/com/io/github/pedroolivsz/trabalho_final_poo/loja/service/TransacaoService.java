@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.BuyValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.TransacaoRepository;
@@ -66,6 +67,10 @@ public class TransacaoService {
         VendaValidator.validarCarrinho(carrinho);
 
         BigDecimal total = carrinho.calcularTotal();
+
+        if(comprador.getContaBancaria().getSaldo().compareTo(total) < 0) {
+            throw new BuyValidationException("Saldo insuficiente");
+        }
 
         comprador.getContaBancaria().debitar(total);
         comprador.debitar(total);

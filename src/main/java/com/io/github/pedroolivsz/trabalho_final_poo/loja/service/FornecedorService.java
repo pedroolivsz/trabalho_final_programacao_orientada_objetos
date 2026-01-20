@@ -6,6 +6,8 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.FornecedorRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.OutfitterValidator;
 
+import java.util.List;
+
 public class FornecedorService {
     private final FornecedorRepository fornecedorRepository;
     private final LojaService lojaService;
@@ -56,5 +58,9 @@ public class FornecedorService {
 
     public Fornecedor procurarPorCnpj(String cnpj) {
         return fornecedorRepository.procurarPorCnpj(cnpj);
+    }
+
+    public List<Fornecedor> listar() {
+        return fornecedorRepository.listar();
     }
 }
