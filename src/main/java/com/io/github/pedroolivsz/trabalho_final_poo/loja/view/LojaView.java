@@ -123,10 +123,12 @@ public class LojaView {
         switch (opcao) {
             case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
             case 1 -> produtoView.cadastrarProduto(loja.getId());
-            case 2 -> transacaoView.exibirMenuDeVenda(loja);
-            case 3 -> produtoView.listarProdutos(loja.getId());
-            case 4 -> relatorioGeral(loja);
-            case 5 -> fornecedorView.menuDoFornecedor(loja);
+            case 2 -> produtoView.editarProduto(loja.getId());
+            case 3 -> produtoView.excluirProduto(loja.getId());
+            case 4 -> transacaoView.exibirMenuDeVenda(loja);
+            case 5 -> produtoView.listarProdutos(loja.getId());
+            case 6 -> relatorioGeral(loja);
+            case 7 -> fornecedorView.menuDoFornecedor(loja);
             default -> MessageUtil.error("Opção inválida", "Erro");
         }
     }
@@ -160,10 +162,12 @@ public class LojaView {
                 │Valor em caixa: %s
                 │────────────────────────────────────────────────────────│
                 │ 1. Cadastrar produto
-                │ 2. Vender produtos
-                │ 3. Listar produtos
-                │ 4. Relatório de vendas
-                │ 5. Fornecedores
+                │ 2. Editar produto
+                │ 3. Excluir produto
+                │ 4. Vender produtos
+                │ 5. Listar produtos
+                │ 6. Relatório de vendas
+                │ 7. Fornecedores
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""".formatted(nome, PadronizarDadosUtil.normalizarSaldo(saldo));
     }

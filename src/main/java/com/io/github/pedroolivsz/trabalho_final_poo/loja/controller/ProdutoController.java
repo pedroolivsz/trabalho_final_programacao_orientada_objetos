@@ -28,4 +28,12 @@ public class ProdutoController {
     public List<Produto> listarProdutos(long idLoja) {
         return produtoService.listarProdutos(idLoja);
     }
+
+    public void editarProduto(Produto produto, String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        produtoService.editarProduto(produto, nome, descricao, quantidade, valorUnitario);
+    }
+
+    public void excluirProduto(Produto produto) {
+        produtoService.excluirProduto(produto);
+    }
 }

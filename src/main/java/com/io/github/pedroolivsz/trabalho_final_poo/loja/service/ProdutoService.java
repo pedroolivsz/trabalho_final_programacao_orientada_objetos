@@ -72,6 +72,20 @@ public class ProdutoService {
         }
     }
 
+    public void editarProduto(Produto produto, String nome, String descricao, int quantidade, BigDecimal valorUnitario) {
+        ProductValidator.validarExistenciaDeProduto(produto);
+        ProductValidator.validarDadosDoProduto(nome, descricao, quantidade, valorUnitario);
+        produto.setNome(nome);
+        produto.setDescricao(descricao);
+        produto.setQuantidade(quantidade);
+        produto.setValorUnitario(valorUnitario);
+    }
+
+    public void excluirProduto(Produto produto) {
+        ProductValidator.validarExistenciaDeProduto(produto);
+        produtoRepository.removerProduto(produto);
+    }
+
     public List<Produto> listarProdutos(long idLoja) {
         return produtoRepository.listarProdutos(idLoja);
     }

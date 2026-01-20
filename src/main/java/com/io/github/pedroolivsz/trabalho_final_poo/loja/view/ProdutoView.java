@@ -25,14 +25,52 @@ public class ProdutoView {
             BigDecimal valorUnitario = InputUtil.lerBigDecimal("Valor unitário: ", "Cadastro de produtos");
 
             produtoController.cadastrarProduto(idLoja, nome, descricao, quantidade, valorUnitario);
+
+            MessageUtil.plain("O produto: " + nome + " foi cadastrado com sucesso", "Sucesso ao cadastrar produto");
         } catch (ProductValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao cadastrar produto");
         }
     }
 
-    public void subtrairQuantidadeProduto(long idLoja, String nome, int quantidade) {
+    public void editarProduto(long idLoja) {
         try {
-            produtoController.subtrairQuantidadeProduto(idLoja, nome, quantidade);
+            List<Produto> produtos = produtoController.listarProdutos(idLoja);
+
+            if(produtos.isEmpty()) {
+                MessageUtil.error("Estoque vazio", "Erro");
+                return;
+            }
+
+            Produto produto = InputUtil.selecionarObjeto(produtos, "Escolha o produto: ", "Edição de produtos");
+
+            String nome = InputUtil.lerString("Nome: ", "Edição de produtos");
+            String descricao = InputUtil.lerString("Descrição: ", "Edição de produtos");
+            int quantidade = InputUtil.lerInteiro("Quantidade: ", "Edição de produtos");
+            BigDecimal valorUnitario = InputUtil.lerBigDecimal("Valor unitário: ", "Edição de produtos");
+
+            produtoController.editarProduto(produto, nome, descricao, quantidade, valorUnitario);
+
+            MessageUtil.plain("O produto: " + nome + " foi editado com sucesso", "Sucesso ao editar produto");
+        } catch (ProductValidationException exception) {
+            MessageUtil.error(exception.getMessage(), "Erro");
+        }
+    }
+
+    public void excluirProduto(long idLoja) {
+        try {
+            List<Produto> produtos = produtoController.listarProdutos(idLoja);
+
+            if(produtos.isEmpty()) {
+                MessageUtil.error("Estoque vazio", "Erro");
+                return;
+            }
+
+            Produto produto = InputUtil.selecionarObjeto(produtos, "Escolha o produto: ",
+                    "Excluir produtos");
+
+            MessageUtil.plain("O produto: " + produto.getNome() + " foi excluido com sucesso", "Sucesso ao excluir produto");
+
+            produtoController.excluirProduto(produto);
         } catch (ProductValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro");
         }
@@ -47,16 +85,13 @@ public class ProdutoView {
     }
 
     public String formatarListaSimplesProdutos(List<Produto> produtos) {
-        List<Produto> listaDeProdutos = produtos;
-
-        if (listaDeProdutos.isEmpty()) {
-            MessageUtil.error(listaVazia(), "Erro");
-            return "Lista vazia";
+        if (produtos.isEmpty()) {
+            return "Estoque vazio";
         }
 
         StringBuilder stringLista = new StringBuilder();
 
-        for (Produto produto : listaDeProdutos) {
+        for (Produto produto : produtos) {
             stringLista.append("│").append("Nome: ").append(produto.getNome()).append(" ")
                         .append("│").append("Qtd: ").append(produto.getQuantidade()).append(" ")
                         .append("│").append("Valor Un.: R$ ").append(produto.getValorUnitario())
@@ -67,10 +102,8 @@ public class ProdutoView {
     }
 
     public String formatarListaSimplesItensTransacao(List<ItemTransacao> produtos) {
-
         if (produtos.isEmpty()) {
-            MessageUtil.error(listaVazia(), "Erro");
-            return "Lista vazia";
+            return "Estoque vazio";
         }
 
         StringBuilder stringLista = new StringBuilder();
@@ -86,16 +119,13 @@ public class ProdutoView {
     }
 
     public String formatarListaCompletaProdutos(List<Produto> produtos) {
-        List<Produto> listaDeProdutos = produtos;
-
-        if (listaDeProdutos.isEmpty()) {
-            MessageUtil.error(listaVazia(), "Erro");
-            return "Lista vazia";
+        if (produtos.isEmpty()) {
+            return "Estoque vazio";
         }
 
         StringBuilder stringLista = new StringBuilder();
 
-        for (Produto produto : listaDeProdutos) {
+        for (Produto produto : produtos) {
             stringLista.append("│").append("Código de barras: ").append(produto.getCodigoDeBarras()).append(" ")
                     .append("│").append("Nome: ").append(produto.getNome()).append(" ")
                     .append("│").append("Descrição: ").append(produto.getDescricao()).append(" ")
@@ -105,21 +135,5 @@ public class ProdutoView {
         }
 
         return stringLista.toString();
-    }
-
-    private String listaVazia() {
-        return """
-                ┌──────────────────────────────────────────────────┐
-                │A lista está vazia.
-                └──────────────────────────────────────────────────┘""";
-    }
-
-    private String montarLista(String lista) {
-        return """
-                ┌──────────────────────────────────────────────────┐
-                │Produtos em estoque
-                └──────────────────────────────────────────────────┘
-                %s
-                └──────────────────────────────────────────────────┘""".formatted(lista);
     }
 }
