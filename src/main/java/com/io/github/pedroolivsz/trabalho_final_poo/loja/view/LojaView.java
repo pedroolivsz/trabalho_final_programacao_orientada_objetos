@@ -15,16 +15,16 @@ public class LojaView {
     private final LojaController lojaController;
     private final TransacaoController transacaoController;
     private final ProdutoView produtoView;
-    private final TransacaoView transacaoView;
+    private final ClienteView clienteView;
     private final FornecedorView fornecedorView;
 
     public LojaView(LojaController lojaController, TransacaoController transacaoController,
-                    ProdutoView produtoView, TransacaoView transacaoView,
+                    ProdutoView produtoView, ClienteView clienteView,
                     FornecedorView fornecedorView) {
         this.lojaController = lojaController;
         this.transacaoController = transacaoController;
         this.produtoView = produtoView;
-        this.transacaoView = transacaoView;
+        this.clienteView = clienteView;
         this.fornecedorView = fornecedorView;
     }
 
@@ -41,14 +41,14 @@ public class LojaView {
             String bairro = InputUtil.lerString("Bairro: ", TITULO_CADASTRO);
             String rua = InputUtil.lerString("Rua: ", TITULO_CADASTRO);
             String numero = InputUtil.lerString("Número: ", TITULO_CADASTRO);
-            Categoria categoria = InputUtil.lerCategoria(TITULO_CADASTRO);
+            Categoria categoria = InputUtil.selecionarEnum(Categoria.class, "Escolha a categoria", TITULO_CADASTRO);
             String telefone = InputUtil.lerString("Telefone: ", TITULO_CADASTRO);
             String email = InputUtil.lerString("E-mail: ", TITULO_CADASTRO);
             String senha = InputUtil.lerString("Senha: ", TITULO_CADASTRO);
 
             lojaController.salvarLoja(nome, cnpj, cep, estado, cidade, bairro, rua, numero, categoria, telefone, email, senha);
             MessageUtil.plain("Loja adicionada com sucesso!", "Finalizado");
-        } catch (ShopValidationException exception) {
+        } catch (ShopValidationException | IllegalArgumentException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao cadastrar loja");
         }
     }
@@ -91,6 +91,21 @@ public class LojaView {
         MessageUtil.plain(relatorio, "Relatório geral");
     }
 
+    public void exibirMenuGeral() {
+        int opcao;
+
+        do {
+            opcao = InputUtil.lerInteiro(montarMenuGeral(), TITULO_SISTEMA);
+
+            switch (opcao) {
+                case 0 -> MessageUtil.plain("Voltando a pagina anterior...", "Saindo");
+                case 1 -> clienteView.menuCliente();
+                case 2 -> exibirMenuPrincipal();
+                default -> MessageUtil.error("Opção inválida", "Erro");
+            }
+        } while (opcao != 0);
+    }
+
     public void exibirMenuPrincipal() {
         int opcao;
         do {
@@ -125,15 +140,14 @@ public class LojaView {
             case 1 -> produtoView.cadastrarProduto(loja.getId());
             case 2 -> produtoView.editarProduto(loja.getId());
             case 3 -> produtoView.excluirProduto(loja.getId());
-            case 4 -> transacaoView.exibirMenuDeVenda(loja);
-            case 5 -> produtoView.listarProdutos(loja.getId());
-            case 6 -> relatorioGeral(loja);
-            case 7 -> fornecedorView.menuDoFornecedor(loja);
+            case 4 -> produtoView.listarProdutos(loja.getId());
+            case 5 -> relatorioGeral(loja);
+            case 6 -> fornecedorView.menuDoFornecedor(loja);
             default -> MessageUtil.error("Opção inválida", "Erro");
         }
     }
 
-    public String primeiroMenu() {
+    public String montarMenuGeral() {
         return """
                 ┌────────────────────────────────────────────────────────┐
                 │                     MENU INICIAL
@@ -164,10 +178,9 @@ public class LojaView {
                 │ 1. Cadastrar produto
                 │ 2. Editar produto
                 │ 3. Excluir produto
-                │ 4. Vender produtos
-                │ 5. Listar produtos
-                │ 6. Relatório de vendas
-                │ 7. Fornecedores
+                │ 4. Listar produtos
+                │ 5. Relatório de vendas
+                │ 6. Fornecedores
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""".formatted(nome, PadronizarDadosUtil.normalizarSaldo(saldo));
     }

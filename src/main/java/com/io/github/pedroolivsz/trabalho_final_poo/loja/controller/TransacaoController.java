@@ -12,8 +12,8 @@ public class TransacaoController {
         this.transacaoService = transacaoService;
     }
 
-    public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja) {
-        transacaoService.realizarVenda(carrinho, tipoPagamento, loja);
+    public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja, Cliente cliente) {
+        transacaoService.realizarVenda(carrinho, tipoPagamento, loja, cliente);
     }
 
     public void realizarCompra(Carrinho carrinho, TipoPagamento tipoPagamento, Loja fornecedor, Loja comprador) {

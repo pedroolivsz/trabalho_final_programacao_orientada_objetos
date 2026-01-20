@@ -1,5 +1,6 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.TransacaoRepository;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.BuyValidator;
@@ -17,17 +18,25 @@ public class TransacaoService {
         this.produtoService = produtoService;
     }
 
-    public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja) {
+    public void realizarVenda(Carrinho carrinho, TipoPagamento tipoPagamento, Loja loja, Cliente cliente) {
         ShopValidator.validarLojaAtiva(loja);
         VendaValidator.validarCarrinho(carrinho);
         VendaValidator.validarTipoPagamento(tipoPagamento);
 
         removerProdutosVendidos(loja.getId(), carrinho);
 
-        loja.getContaBancaria().creditar(carrinho.calcularTotal());
-        loja.creditar(carrinho.calcularTotal());
+        BigDecimal total = carrinho.calcularTotal();
 
-        Transacao venda = new Transacao(loja.getId(), carrinho.getProdutos(), tipoPagamento, TipoTransacao.VENDA, carrinho.calcularTotal());
+        if(cliente.getContaBancaia().getSaldo().compareTo(total) < 0) {
+            throw new ShopValidationException("Saldo insuficiente para realizar a compra");
+        }
+
+        cliente.getContaBancaia().debitar(total);
+
+        loja.getContaBancaria().creditar(total);
+        loja.creditar(total);
+
+        Transacao venda = new Transacao(loja.getId(), carrinho.getProdutos(), tipoPagamento, TipoTransacao.VENDA, total);
 
         transacaoRepository.salvar(venda);
     }

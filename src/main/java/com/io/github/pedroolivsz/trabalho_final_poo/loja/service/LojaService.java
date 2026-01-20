@@ -13,6 +13,7 @@ import com.io.github.pedroolivsz.trabalho_final_poo.util.PasswordUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.validation.ShopValidator;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class LojaService {
     private final LojaRepository lojaRepository;
@@ -56,10 +57,6 @@ public class LojaService {
         Contatos contatos = criarContatosPadrao(telefone, email);
 
         Loja loja = criarLojaPadrao(nome, cnpj, endereco, categoria, contatos, senha);
-
-        System.out.println("Tentando criar conta para: " + cnpj);
-        System.out.println("Tentando criar conta para: " + email);
-        System.out.println("Tentando criar conta para: " + senha);
 
         Conta conta = agenciaBancariaService.criarConta(loja.getNome(), loja.getCnpj(), loja.getCidade(), loja.getEmail(), senha);
 
@@ -154,6 +151,10 @@ public class LojaService {
 
     private boolean existeTelefone(String telefone) {
         return procurarPorTelefone(telefone) != null;
+    }
+
+    public List<Loja> listar() {
+        return lojaRepository.listarLojas();
     }
 
     public Loja getLojaLogada() {

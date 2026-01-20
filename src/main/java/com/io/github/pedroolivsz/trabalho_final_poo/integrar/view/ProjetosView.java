@@ -22,7 +22,7 @@ public class ProjetosView {
             switch (opcao) {
                 case 0 -> MessageUtil.plain("Encerrando sistema...", "Saindo");
                 case 1 -> agenciaBancariaView.menuInicial();
-                case 2 -> lojaView.exibirMenuPrincipal();
+                case 2 -> lojaView.exibirMenuGeral();
                 default -> MessageUtil.error("Opção inválida", "Tente novamente");
             }
         } while (opcao != 0);

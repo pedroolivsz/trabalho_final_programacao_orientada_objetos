@@ -24,10 +24,7 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.FornecedorServi
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.LojaService;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.ProdutoService;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.TransacaoService;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.FornecedorView;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.LojaView;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.ProdutoView;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.TransacaoView;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +41,8 @@ public class ProjetosApp {
 
         AgenciaBancariaRepository agenciaBancariaRepository = new AgenciaBancariaRepository(contas);
         AgenciaBancariaService agenciaBancariaService = new AgenciaBancariaService(agenciaBancariaRepository);
-        /**agenciaBancariaService.criarConta("Skullka", "123.456.789-10", "Crato", "jp", "dede");
-        agenciaBancariaService.criarConta("Wandinha", "109.876.543-21", "Crato", "dede", "jp");**/
+        agenciaBancariaService.criarConta("Skullka", "123.456.789-10", "Crato", "jp", "dede");
+        agenciaBancariaService.criarConta("Wandinha", "109.876.543-21", "Crato", "dede", "jp");
         AgenciaBancariaController agenciaBancariaController = new AgenciaBancariaController(agenciaBancariaService);
 
         AgenciaBancariaView agenciaBancariaView = new AgenciaBancariaView(agenciaBancariaController, comprovanteView);
@@ -71,14 +68,16 @@ public class ProjetosApp {
         TransacaoRepository transacaoRepository = new TransacaoRepository(transacoes);
         TransacaoService transacaoService = new TransacaoService(transacaoRepository, produtoService);
         TransacaoController transacaoController = new TransacaoController(transacaoService);
-        TransacaoView transacaoView = new TransacaoView(transacaoController, produtoView);
+        TransacaoView transacaoView = new TransacaoView(transacaoController, produtoView, produtoController);
+
+        ClienteView clienteView = new ClienteView(transacaoView, produtoView,lojaController, agenciaBancariaService);
 
         FornecedorRepository fornecedorRepository = new FornecedorRepository(fornecedores);
         FornecedorService fornecedorService = new FornecedorService(fornecedorRepository, lojaService);
         FornecedorController fornecedorController = new FornecedorController(fornecedorService);
         FornecedorView fornecedorView = new FornecedorView(fornecedorController, transacaoView);
 
-        LojaView lojaView = new LojaView(lojaController, transacaoController, produtoView, transacaoView, fornecedorView);
+        LojaView lojaView = new LojaView(lojaController, transacaoController, produtoView, clienteView, fornecedorView);
 
         ProjetosView projetosView = new ProjetosView(lojaView, agenciaBancariaView);
 

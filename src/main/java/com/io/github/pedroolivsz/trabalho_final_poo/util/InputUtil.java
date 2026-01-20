@@ -76,13 +76,33 @@ public class InputUtil {
     public static <T> T selecionarObjeto(List<T> list, String msg, String titulo) {
         if(list.isEmpty()) return null;
 
-        return (T) JOptionPane.showInputDialog(null,
+        T objeto = (T) JOptionPane.showInputDialog(null,
                 msg,
                 titulo,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 list.toArray(),
                 list.get(0));
+
+        if(objeto == null) throw new IllegalArgumentException("Operação cancelada");
+
+        return objeto;
+    }
+
+    public static <E extends  Enum<E>> E selecionarEnum(Class<E> enumClass, String msg, String titulo) {
+        E[] valores = enumClass.getEnumConstants();
+
+        E selecionado = (E) JOptionPane.showInputDialog(null,
+                msg,
+                titulo,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                valores,
+                valores[0]);
+
+        if(selecionado == null) throw new IllegalArgumentException("Operação cancelada");
+
+        return selecionado;
     }
     public static int lerConfirmacao(String msg, String titulo) {
         return JOptionPane.showConfirmDialog(null, msg, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);

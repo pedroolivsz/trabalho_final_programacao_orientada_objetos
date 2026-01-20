@@ -37,7 +37,7 @@ public class AgenciaBancariaService {
 
         agenciaBancariaRepository.criarConta(conta);
 
-        System.out.println("Conta criada com sucesso");
+        System.out.println("Conta criada com Nº " + conta.getNumeroDaConta());
 
         return conta;
     }

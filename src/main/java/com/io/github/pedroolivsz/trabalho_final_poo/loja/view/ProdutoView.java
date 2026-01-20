@@ -51,8 +51,8 @@ public class ProdutoView {
             produtoController.editarProduto(produto, nome, descricao, quantidade, valorUnitario);
 
             MessageUtil.plain("O produto: " + nome + " foi editado com sucesso", "Sucesso ao editar produto");
-        } catch (ProductValidationException exception) {
-            MessageUtil.error(exception.getMessage(), "Erro");
+        } catch (ProductValidationException | IllegalArgumentException exception) {
+                MessageUtil.error(exception.getMessage(), "Erro");
         }
     }
 
@@ -71,7 +71,7 @@ public class ProdutoView {
             MessageUtil.plain("O produto: " + produto.getNome() + " foi excluido com sucesso", "Sucesso ao excluir produto");
 
             produtoController.excluirProduto(produto);
-        } catch (ProductValidationException exception) {
+        } catch (ProductValidationException | IllegalArgumentException exception) {
             MessageUtil.error(exception.getMessage(), "Erro");
         }
     }

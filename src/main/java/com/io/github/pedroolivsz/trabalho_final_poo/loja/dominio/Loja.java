@@ -202,4 +202,9 @@ public class Loja {
     public void setCaixa(BigDecimal caixa) {
         this.caixa = caixa;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

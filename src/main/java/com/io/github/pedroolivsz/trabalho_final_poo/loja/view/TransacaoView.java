@@ -3,10 +3,9 @@ package com.io.github.pedroolivsz.trabalho_final_poo.loja.view;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ProductValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.SaleValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.ProdutoController;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.controller.TransacaoController;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Carrinho;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
-import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.TipoPagamento;
+import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.InputUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.MessageUtil;
 import com.io.github.pedroolivsz.trabalho_final_poo.util.PadronizarDadosUtil;
@@ -16,29 +15,33 @@ import java.math.BigDecimal;
 public class TransacaoView {
     private final TransacaoController transacaoController;
     private final ProdutoView produtoView;
+    private final ProdutoController produtoController;
 
-    public TransacaoView(TransacaoController transacaoController, ProdutoView produtoView) {
+    public TransacaoView(TransacaoController transacaoController, ProdutoView produtoView, ProdutoController produtoController) {
         this.transacaoController = transacaoController;
         this.produtoView = produtoView;
+        this.produtoController = produtoController;
     }
 
     private void adicionarProdutoAoCarrinho(long idLoja, Carrinho carrinho) {
         try {
-            String nome = InputUtil.lerString("Nome do produto: ", "Adicionar produto");
-            int quantidade = InputUtil.lerInteiro("Insira a quantidade: ", "Adicionar produto");
+            Produto produto = InputUtil.selecionarObjeto(produtoController.listarProdutos(idLoja), "Escolha o produto", "Adicionar ao carrinho");
+            int quantidade = InputUtil.lerInteiro("Quantidade: ", "Adicionar ao carrinho");
 
-            transacaoController.adicionarProduto(idLoja, carrinho, nome, quantidade);
+            transacaoController.adicionarProduto(idLoja, carrinho, produto.getNome(), quantidade);
 
-            MessageUtil.plain(nome + " adicionado ao carrinho", "Sucesso");
+            MessageUtil.plain(produto.getNome() + " adicionado ao carrinho", "Sucesso");
         } catch (SaleValidationException exception) {
             MessageUtil.error(exception.getMessage(), "Erro ao adicionar produto ao carrinho");
+        } catch (IllegalArgumentException illegalArgumentException) {
+            MessageUtil.error(illegalArgumentException.getMessage(), "Voltando a página anterior");
         }
     }
 
-    public void finalizarVenda(Carrinho carrinho, Loja loja) {
+    public void finalizarVenda(Carrinho carrinho, Loja loja, Cliente cliente) {
         finalzarTransacao(carrinho,
                 "Finalizar venda",
-                () -> transacaoController.realizarVenda(carrinho, TipoPagamento.PIX, loja));
+                () -> transacaoController.realizarVenda(carrinho, TipoPagamento.PIX, loja, cliente));
     }
 
     public void finalizarCompra(Carrinho carrinho, Loja fornecedor, Loja comprador) {
@@ -82,7 +85,7 @@ public class TransacaoView {
         MessageUtil.plain(carrinhoFormatado, "Carrinho");
     }
 
-    public void exibirMenuDeVenda(Loja loja) {
+    public void exibirMenuDeVenda(Loja loja, Cliente cliente) {
         try {
             int opcao;
             Carrinho carrinho = new Carrinho();
@@ -90,9 +93,10 @@ public class TransacaoView {
                 opcao = InputUtil.lerInteiro(montarMenuDeVendas(), "Sistema de loja");
                 switch (opcao) {
                     case 0 -> MessageUtil.plain("Saindo...", "Voltando a página anterior");
-                    case 1 -> adicionarProdutoAoCarrinho(loja.getId(), carrinho);
-                    case 2 -> exibirCarrinho(carrinho);
-                    case 3 -> finalizarVenda(carrinho, loja);
+                    case 1 -> produtoView.listarProdutos(loja.getId());
+                    case 2 -> adicionarProdutoAoCarrinho(loja.getId(), carrinho);
+                    case 3 -> exibirCarrinho(carrinho);
+                    case 4 -> finalizarVenda(carrinho, loja, cliente);
                     default -> MessageUtil.error("Opção inválida", "Erro");
                 }
             } while(opcao!=0);
@@ -124,11 +128,12 @@ public class TransacaoView {
     private String montarMenuDeVendas() {
         return """
                 ┌────────────────────────────────────────────────────────┐
-                │                    Menu de vendas
+                │                    Compras
                 │────────────────────────────────────────────────────────│
-                │ 1. Escolher produto
-                │ 2. Carrinho
-                │ 3. Finalizar compra
+                │ 1. Catalogo da loja
+                │ 2. Escolher produto
+                │ 3. Carrinho
+                │ 4. Finalizar compra
                 │ 0. Sair
                 └────────────────────────────────────────────────────────┘""";
     }

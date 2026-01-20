@@ -4,6 +4,8 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Loja;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.service.LojaService;
 
+import java.util.List;
+
 public class LojaController {
 	private final LojaService lojaService;
 
@@ -29,4 +31,8 @@ public class LojaController {
 	public Loja login(String CNPJ, String senha) {
 		return lojaService.login(CNPJ, senha);
 	}
+
+    public List<Loja> listar() {
+        return lojaService.listar();
+    }
 }
