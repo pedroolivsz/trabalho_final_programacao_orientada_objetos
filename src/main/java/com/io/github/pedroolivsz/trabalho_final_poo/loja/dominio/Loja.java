@@ -1,5 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.agencia.dominio.Conta;
+
 import java.math.BigDecimal;
 
 public class Loja {
@@ -12,6 +14,7 @@ public class Loja {
     private StatusLoja status;
     private String senha;
     private BigDecimal caixa;
+    private Conta contaBancaria;
 
     private int operacoesComCaixaZerado;
 
@@ -54,6 +57,14 @@ public class Loja {
 
     public boolean estaBloqueada() {
         return this.status == StatusLoja.BLOQUEADA;
+    }
+
+    public Conta getContaBancaria() {
+        return contaBancaria;
+    }
+
+    public void setContaBancaria(Conta contaBancaria) {
+        this.contaBancaria = contaBancaria;
     }
 
     public long getId() {

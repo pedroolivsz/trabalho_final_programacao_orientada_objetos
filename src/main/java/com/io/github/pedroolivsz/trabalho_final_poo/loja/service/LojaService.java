@@ -1,5 +1,7 @@
 package com.io.github.pedroolivsz.trabalho_final_poo.loja.service;
 
+import com.io.github.pedroolivsz.trabalho_final_poo.agencia.dominio.Conta;
+import com.io.github.pedroolivsz.trabalho_final_poo.agencia.service.AgenciaBancariaService;
 import com.io.github.pedroolivsz.trabalho_final_poo.exceptions.ShopValidationException;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.*;
 import com.io.github.pedroolivsz.trabalho_final_poo.loja.repository.LojaRepository;
@@ -14,11 +16,13 @@ import java.math.BigDecimal;
 
 public class LojaService {
     private final LojaRepository lojaRepository;
+    private final AgenciaBancariaService agenciaBancariaService;
     private Loja lojaLogada;
     private long countLojas = 0;
 
-    public LojaService(LojaRepository lojaRepository) {
+    public LojaService(LojaRepository lojaRepository, AgenciaBancariaService agenciaBancariaService) {
         this.lojaRepository = lojaRepository;
+        this.agenciaBancariaService = agenciaBancariaService;
     }
 
     public void salvarLoja(String nome,
@@ -52,6 +56,14 @@ public class LojaService {
         Contatos contatos = criarContatosPadrao(telefone, email);
 
         Loja loja = criarLojaPadrao(nome, cnpj, endereco, categoria, contatos, senha);
+
+        System.out.println("Tentando criar conta para: " + cnpj);
+        System.out.println("Tentando criar conta para: " + email);
+        System.out.println("Tentando criar conta para: " + senha);
+
+        Conta conta = agenciaBancariaService.criarConta(loja.getNome(), loja.getCnpj(), loja.getCidade(), loja.getEmail(), senha);
+
+        loja.setContaBancaria(conta);
 
         loja.setId(countLojas++);
 

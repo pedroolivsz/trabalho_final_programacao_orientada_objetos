@@ -24,6 +24,7 @@ public class TransacaoService {
 
         removerProdutosVendidos(loja.getId(), carrinho);
 
+        loja.getContaBancaria().creditar(carrinho.calcularTotal());
         loja.creditar(carrinho.calcularTotal());
 
         Transacao venda = new Transacao(loja.getId(), carrinho.getProdutos(), tipoPagamento, TipoTransacao.VENDA, carrinho.calcularTotal());
@@ -57,6 +58,7 @@ public class TransacaoService {
 
         BigDecimal total = carrinho.calcularTotal();
 
+        comprador.getContaBancaria().debitar(total);
         comprador.debitar(total);
 
         removerProdutosVendidos(fornecedor.getId(), carrinho);
@@ -75,6 +77,7 @@ public class TransacaoService {
                 TipoTransacao.VENDA,
                 total);
 
+        fornecedor.getContaBancaria().creditar(total);
         fornecedor.creditar(total);
 
         transacaoRepository.salvar(compra);

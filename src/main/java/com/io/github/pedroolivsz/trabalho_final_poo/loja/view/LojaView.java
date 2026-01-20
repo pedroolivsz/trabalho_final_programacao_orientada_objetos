@@ -131,6 +131,17 @@ public class LojaView {
         }
     }
 
+    public String primeiroMenu() {
+        return """
+                ┌────────────────────────────────────────────────────────┐
+                │                     MENU INICIAL
+                │────────────────────────────────────────────────────────│
+                │ 1. Entrar como cliente
+                │ 2. Entrar como gerente
+                │ 0. Sair
+                └────────────────────────────────────────────────────────┘""";
+    }
+
     public String montarMenuPrincipal() {
         return """
                 ┌────────────────────────────────────────────────────────┐

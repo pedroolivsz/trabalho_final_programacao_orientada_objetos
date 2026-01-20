@@ -19,7 +19,7 @@ public class AgenciaBancariaService {
         this.agenciaBancariaRepository = agenciaBancariaRepository;
     }
 
-    public void criarConta(String nome, String CPF, String endereco, String email, String senha) throws PersonValidationException {
+    public Conta criarConta(String nome, String CPF, String endereco, String email, String senha) throws PersonValidationException {
         AccountValidator.validarConta(nome, CPF, endereco, email, senha);
 
         Conta contaDuplicadaEmail = procurarContaPorEmail(email);
@@ -36,6 +36,10 @@ public class AgenciaBancariaService {
         Conta conta = new Conta(proprietario, numeroConta);
 
         agenciaBancariaRepository.criarConta(conta);
+
+        System.out.println("Conta criada com sucesso");
+
+        return conta;
     }
 
     public List<Conta> listarContas() {

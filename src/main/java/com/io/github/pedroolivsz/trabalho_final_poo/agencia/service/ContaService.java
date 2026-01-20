@@ -8,11 +8,15 @@ import com.io.github.pedroolivsz.trabalho_final_poo.agencia.validation.AccountVa
 import java.math.BigDecimal;
 
 public class ContaService {
-    private final Conta contaProprietaria;
+    private Conta contaProprietaria;
     private final AgenciaBancariaController agenciaBancariaController;
 
     public ContaService(Conta contaProprietaria, AgenciaBancariaController agenciaBancariaController) {
         this.contaProprietaria = contaProprietaria;
+        this.agenciaBancariaController = agenciaBancariaController;
+    }
+
+    public ContaService(AgenciaBancariaController agenciaBancariaController) {
         this.agenciaBancariaController = agenciaBancariaController;
     }
 
@@ -21,11 +25,25 @@ public class ContaService {
         contaProprietaria.setSaldo(contaProprietaria.getSaldo().add(valor));
     }
 
+    public void creditar(Conta conta, BigDecimal valor) {
+        AccountValidator.validarContaExistente(conta);
+        AccountValidator.validarDeposito(valor);
+        conta.setSaldo(conta.getSaldo().add(valor));
+    }
+
     public void sacar(BigDecimal valor) {
         AccountValidator.validarSaque(valor);
         if(valor.compareTo(contaProprietaria.getSaldo()) > 0) throw new AccountException("Saldo insuficiente para realizar a transação.");
 
         contaProprietaria.setSaldo(contaProprietaria.getSaldo().subtract(valor));
+    }
+
+    public void debitar(Conta conta, BigDecimal valor) {
+        AccountValidator.validarSaque(valor);
+        if (valor.compareTo(conta.getSaldo()) > 0)
+            throw new AccountException("Saldo insuficiente para realizar a transação.");
+
+        conta.setSaldo(conta.getSaldo().subtract(valor));
     }
 
     public void transferir(String numeroConta, BigDecimal valor) {

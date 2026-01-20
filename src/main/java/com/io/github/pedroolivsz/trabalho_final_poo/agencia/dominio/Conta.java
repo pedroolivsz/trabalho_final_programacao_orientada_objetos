@@ -18,6 +18,14 @@ public class Conta {
         this.status = StatusConta.ATIVA;
     }
 
+    public void creditar(BigDecimal valor) {
+        this.saldo = this.saldo.add(valor);
+    }
+
+    public void debitar(BigDecimal valor) {
+        this.saldo = this.saldo.subtract(valor);
+    }
+
     public String getNumeroDaConta() { return numeroDaConta; }
 
     public Pessoa getProprietario() { return proprietario; }
