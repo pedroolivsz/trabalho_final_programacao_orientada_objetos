@@ -4,6 +4,7 @@ import com.io.github.pedroolivsz.trabalho_final_poo.loja.dominio.Categoria;
 
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class InputUtil {
 
@@ -70,6 +71,18 @@ public class InputUtil {
                 MessageUtil.error("Por favor, digite uma opção válida", "Erro");
             }
         }
+    }
+
+    public static <T> T selecionarObjeto(List<T> list, String msg, String titulo) {
+        if(list.isEmpty()) return null;
+
+        return (T) JOptionPane.showInputDialog(null,
+                msg,
+                titulo,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                list.toArray(),
+                list.get(0));
     }
     public static int lerConfirmacao(String msg, String titulo) {
         return JOptionPane.showConfirmDialog(null, msg, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
